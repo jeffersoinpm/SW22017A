@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title">
+        Reserva de Habitaciones1- <span class="subitem">Reserva</span>
+    </ui:define>
+
+    <ui:define name="description">
+        Debe ingresar los datos con los que desea realizar su reserva.
+    </ui:define>
+
+    <ui:define name="implementation">
+
+        <h:form id="hola">
+            <p:toolbar> 
+                <f:facet name="left">
+                    <p:outputLabel for="popup" value="Fecha de llegada:" />
+                    <p:calendar id="popup" value="#{tipoHabitacionView.selectedFechaInicio}" mindate="#{tipoHabitacionView.fechaActual}" maxdate="#{tipoHabitacionView.fechaMaximaReserva()}">
+                        <p:ajax event="dateSelect" listener="#{tipoHabitacionView.onDateSelect}" update="tabla:listaHabitaciones" />
+                    </p:calendar>
+                    <p:outputLabel for="popup1" value="Fecha de salida: " />
+                    <p:calendar id="popup1" value="#{tipoHabitacionView.selectedFechaFin}" mindate="#{tipoHabitacionView.fechaActual}" maxdate="#{tipoHabitacionView.fechaMaximaReserva()}" >
+                        <p:ajax event="dateSelect" listener="#{tipoHabitacionView.onDateSelect}" update="tabla:listaHabitaciones" />
+                    </p:calendar>
+                    <p:outputLabel for ="idTipoHabitacion" value="Habitación tipo: " />
+                    <p:selectOneMenu id="idTipoHabitacion" value="#{tipoHabitacionView.selectedTipoHabitacion}"  style="width:50px">
+                        <p:ajax listener="#{tipoHabitacionView.onChangeTipoHabitacionSelect()}" update="tabla:listaHabitaciones" />
+                        <f:selectItem itemLabel="Tipo de Habitación" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{tipoHabitacionView.listTipoHbitacion}" var="tipoHabitacion"  itemLabel="#{tipoHabitacion.descripcion}" itemValue="#{tipoHabitacion.idTipoHabitacion}" />
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+
+    </ui:define>
+    
+    
+    <ui:define name="source">
+        <h:form id="tabla">
+            <p:dataTable id="listaHabitaciones" var="habitacion" value="#{tipoHabitacionView.lstHabitacion}" selection="#{tipoHabitacionView.selectedHabitaciones}" rowKey="#{habitacion.idHabitacion}" style="margin-bottom:0">
+                <f:facet name="header">
+                    #{tipoHabitacionView.cabeceraTabla}
+                </f:facet>
+                <p:column headerText="Número de habitación">
+                    <h:outputText value="#{habitacion.idHabitacion}" />
+                </p:column>
+                <p:column headerText="Jacuzzi" >
+                    <p:selectBooleanCheckbox value="#{habitacion.idExtraHabitacion.jacuzzi}" disabled="true"/>
+                </p:column>
+                <p:column headerText="Vista al Mar">
+                    <p:selectBooleanCheckbox value="#{habitacion.idExtraHabitacion.vistaAlMar}" disabled="true"/>
+                </p:column>
+                <p:column headerText="Número de camas">
+                    <h:outputText value="#{habitacion.idTipoHabitacion.numeroCamas}" />
+                </p:column>
+                <p:column headerText="Número de piso">
+                    <h:outputText value="#{habitacion.numeroPiso}" />
+                </p:column>
+                <p:column headerText="Precio">
+                    <h:outputText value="#{habitacion.idTipoHabitacion.costo}" />
+                </p:column>
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <f:facet name="footer">
+                    <p:commandButton process="listaHabitaciones"  update=":tabla:habitacionDetail" icon="ui-icon-search" value="Reserva" oncomplete="PF('habitacionDialog').show()" />
+                </f:facet>
+            </p:dataTable>
+            <p:dialog header="Información Reserva" widgetVar="habitacionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="habitacionDetail" style="text-align:center;">
+                    <p:outputLabel value="Fecha:#{tipoHabitacionView.fechasSeleccionadas}"/>
+                    <ui:repeat value="#{tipoHabitacionView.selectedHabitaciones}" var="habitacion">
+                        <h:outputText value="Habitación: #{habitacion.idHabitacion} - Costo: #{habitacion.idTipoHabitacion.costo} - ValorExtras #{habitacion.idExtraHabitacion.costo}"  style="display:block"/>
+                    </ui:repeat>
+                    <p:outputLabel style="columns: 1" value="Valor Total:#{tipoHabitacionView.costoTotal}"/>
+                    <h:outputText  style="columns: 2" value="Desayuno: " />
+                    <p:selectBooleanCheckbox  value="#{selectBooleanView.value1}" />
+                    <h:outputText value="Parqueadero: " />
+                    <p:selectBooleanCheckbox style="columns: 5" value="#{selectBooleanView.value1}" />
+
+                    <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}"/>
+
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
