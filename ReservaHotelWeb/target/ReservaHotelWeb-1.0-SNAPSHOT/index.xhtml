@@ -70,8 +70,8 @@
             <p:dialog header="Información Reserva" widgetVar="habitacionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="habitacionDetail" style="text-align:center;">
                     <p:outputLabel value="Fecha:#{tipoHabitacionView.fechasSeleccionadas}"/>
-                    <ui:repeat value="#{tipoHabitacionView.selectedHabitaciones}" var="habitacion">
-                        <h:outputText value="Habitación: #{habitacion.idHabitacion} - Costo: #{habitacion.idTipoHabitacion.costo} - ValorExtras #{habitacion.idExtraHabitacion.costo}"  style="display:block"/>
+                    <ui:repeat value="#{tipoHabitacionView.selectedHabitaciones}" var="habitacion1">
+                        <h:outputText value="Habitación: #{habitacion1.idHabitacion} - Costo: #{habitacion1.idTipoHabitacion.costo} - ValorExtras #{habitacion1.idExtraHabitacion.costoTotal}"  style="display:block"/>
                     </ui:repeat>
                     <p:outputLabel style="columns: 1" value="Valor Total:#{tipoHabitacionView.costoTotal}"/>
                     <h:outputText  style="columns: 2" value="Desayuno: " />

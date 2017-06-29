@@ -242,6 +242,7 @@ public class TipoHabitacionView implements Serializable {
             BigDecimal valorExtras = habitacion.getIdExtraHabitacion().getCostoTotal();
             costoTotal = costoTotal.add(valorExtras).add(valorHabitacion);
         }
+        
         this.selectedHabitaciones = selectedHabitaciones;
     }
     
