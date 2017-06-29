@@ -17,7 +17,7 @@
         <h:form id="hola">
             <p:toolbar> 
                 <f:facet name="left">
-                    <p:outputLabel for="popup" value="Fecha de llegada:" />
+                    <p:outputLabel for="popup" value="Fecha de checkin:" />
                     <p:calendar id="popup" value="#{tipoHabitacionView.selectedFechaInicio}" mindate="#{tipoHabitacionView.fechaActual}" maxdate="#{tipoHabitacionView.fechaMaximaReserva()}">
                         <p:ajax event="dateSelect" listener="#{tipoHabitacionView.onDateSelect}" update="tabla:listaHabitaciones" />
                     </p:calendar>
