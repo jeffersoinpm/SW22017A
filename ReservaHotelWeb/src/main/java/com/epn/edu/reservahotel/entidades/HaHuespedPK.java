@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Embeddable
 public class HaHuespedPK implements Serializable {

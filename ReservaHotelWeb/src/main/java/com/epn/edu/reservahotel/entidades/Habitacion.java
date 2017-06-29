@@ -17,22 +17,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Entity
+@Table(name = "habitacion")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Habitacion.findAll", query = "SELECT h FROM Habitacion h"),
     @NamedQuery(name = "Habitacion.findByIdHabitacion", query = "SELECT h FROM Habitacion h WHERE h.idHabitacion = :idHabitacion"),
-    @NamedQuery(name = "Habitacion.findByDisponibilidad", query = "SELECT h FROM Habitacion h WHERE h.disponibilidad = :disponibilidad"),
-    @NamedQuery(name = "Habitacion.findByIdTipoHabitacion", query = "SELECT h FROM Habitacion h WHERE h.idTipoHabitacion.idTipoHabitacion = :idTipoHabitacion"),
     @NamedQuery(name = "Habitacion.findDisponiblesByUnDia", query = "SELECT h FROM Habitacion h WHERE h.idHabitacion NOT IN (SELECT p.reHabitacionPK.idHabitacion FROM ReHabitacion p WHERE p.reHabitacionPK.fechaReservaHabitacion=:fechaReservaHabitacion)"),
+    @NamedQuery(name = "Habitacion.findByIdTipoHabitacion", query = "SELECT h FROM Habitacion h WHERE h.idTipoHabitacion.idTipoHabitacion = :idTipoHabitacion"),
     @NamedQuery(name = "Habitacion.findDisponiblesByRangoDias", query = "SELECT h FROM Habitacion h WHERE h.idHabitacion NOT IN (SELECT p.reHabitacionPK.idHabitacion FROM ReHabitacion p WHERE p.reHabitacionPK.fechaReservaHabitacion between :fechaReservaHabitacionInicio and :fechaReservaHabitacionfin)"),
     @NamedQuery(name = "Habitacion.findDisponiblesByRangoDiasAndTipoHabitacion", query = "SELECT h FROM Habitacion h WHERE h.idHabitacion NOT IN (SELECT p.reHabitacionPK.idHabitacion FROM ReHabitacion p WHERE p.reHabitacionPK.fechaReservaHabitacion between :fechaReservaHabitacionInicio and :fechaReservaHabitacionfin) and h.idTipoHabitacion.idTipoHabitacion = :idTipoHabitacion"),
     @NamedQuery(name = "Habitacion.findByNumeroPiso", query = "SELECT h FROM Habitacion h WHERE h.numeroPiso = :numeroPiso")})

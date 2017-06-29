@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Embeddable
 public class ReHabitacionPK implements Serializable {

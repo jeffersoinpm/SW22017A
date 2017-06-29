@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Entity
 @Table(name = "re_habitacion")

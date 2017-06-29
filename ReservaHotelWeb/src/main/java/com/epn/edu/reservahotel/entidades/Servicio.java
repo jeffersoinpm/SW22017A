@@ -16,15 +16,17 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Entity
+@Table(name = "servicio")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Servicio.findAll", query = "SELECT s FROM Servicio s"),
@@ -42,9 +44,11 @@ public class Servicio implements Serializable {
     private Integer idServicio;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "desayuno")
     private boolean desayuno;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "parqueadero")
     private boolean parqueadero;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)

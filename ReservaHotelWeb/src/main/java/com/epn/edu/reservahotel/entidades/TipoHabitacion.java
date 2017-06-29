@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Entity
 @Table(name = "tipo_habitacion")
@@ -50,10 +50,12 @@ public class TipoHabitacion implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
+    @Column(name = "costo")
     private BigDecimal costo;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(name = "descripcion")
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoHabitacion")
     private List<Habitacion> habitacionList;

@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Entity
 @Table(name = "extra_habitacion")
@@ -41,6 +41,7 @@ public class ExtraHabitacion implements Serializable {
     @NotNull
     @Column(name = "id_extra_habitacion")
     private Integer idExtraHabitacion;
+    @Column(name = "jacuzzi")
     private Boolean jacuzzi;
     @Column(name = "vista_al_mar")
     private Boolean vistaAlMar;

@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,9 +25,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 @Entity
+@Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
@@ -50,12 +52,16 @@ public class Usuario implements Serializable {
     @Column(name = "nombre_usuario")
     private String nombreUsuario;
     @Size(max = 50)
+    @Column(name = "correo")
     private String correo;
     @Size(max = 100)
+    @Column(name = "direccion")
     private String direccion;
     @Size(max = 13)
+    @Column(name = "telefono")
     private String telefono;
     @Size(max = 10)
+    @Column(name = "contrasenia")
     private String contrasenia;
     @JoinColumn(name = "id_perfil", referencedColumnName = "id_perfil")
     @ManyToOne(optional = false)
