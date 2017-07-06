@@ -47,7 +47,7 @@ public class Reserva implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
+    //@Basic(optional = false)
     @Column(name = "id_reserva")
     private Integer idReserva;
     @Basic(optional = false)

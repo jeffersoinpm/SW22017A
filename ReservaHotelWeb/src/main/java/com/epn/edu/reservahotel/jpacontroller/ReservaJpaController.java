@@ -65,7 +65,11 @@ public class ReservaJpaController implements Serializable {
                 attachedReHabitacionList.add(reHabitacionListReHabitacionToAttach);
             }
             reserva.setReHabitacionList(attachedReHabitacionList);
+            System.out.println("aun no guardo la reserva "+reserva);
+            System.out.println(reserva.getIdServicio());
+            System.out.println(reserva.getIdUsuario());
             em.persist(reserva);
+            System.out.println("Ya guardo la reserva "+reserva);
             if (idServicio != null) {
                 idServicio.getReservaList().add(reserva);
                 idServicio = em.merge(idServicio);
@@ -76,13 +80,13 @@ public class ReservaJpaController implements Serializable {
                 idUsuario = em.merge(idUsuario);
             }
             for (ReHabitacion reHabitacionListReHabitacion : reserva.getReHabitacionList()) {
-                Reserva oldReservaOfReHabitacionListReHabitacion = reHabitacionListReHabitacion.getReserva();
+//                Reserva oldReservaOfReHabitacionListReHabitacion = reHabitacionListReHabitacion.getReserva();
                 reHabitacionListReHabitacion.setReserva(reserva);
                 reHabitacionListReHabitacion = em.merge(reHabitacionListReHabitacion);
-                if (oldReservaOfReHabitacionListReHabitacion != null) {
-                    oldReservaOfReHabitacionListReHabitacion.getReHabitacionList().remove(reHabitacionListReHabitacion);
-                    oldReservaOfReHabitacionListReHabitacion = em.merge(oldReservaOfReHabitacionListReHabitacion);
-                }
+//                if (oldReservaOfReHabitacionListReHabitacion != null) {
+//                    oldReservaOfReHabitacionListReHabitacion.getReHabitacionList().remove(reHabitacionListReHabitacion);
+//                    oldReservaOfReHabitacionListReHabitacion = em.merge(oldReservaOfReHabitacionListReHabitacion);
+//                }
             }
             utx.commit();
         } catch (Exception ex) {
@@ -91,9 +95,10 @@ public class ReservaJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findReserva(reserva.getIdReserva()) != null) {
-                throw new PreexistingEntityException("Reserva " + reserva + " already exists.", ex);
-            }
+            System.out.println(ex.getLocalizedMessage());
+//            if (findReserva(reserva.getIdReserva()) != null) {
+//                throw new PreexistingEntityException("Reserva " + reserva + " already exists.", ex);
+//            }
             throw ex;
         } finally {
             if (em != null) {

@@ -253,40 +253,52 @@ public class TipoHabitacionView implements Serializable {
         listReHabitacion = new ArrayList();
         if (selectedFechaInicio == null) {
             c1.setTime(fechaActual);
+        }else{
+            c1.setTime(selectedFechaInicio);
+        }
+        if(selectedFechaFin==null){
+            c2.setTime(fechaActual);
+            c2.add(Calendar.DATE, 1);
+        }else{
+            c2.setTime(selectedFechaFin);
         }
         
-        c2.setTime(selectedFechaFin);
-        Reserva reserva;
         
+        Reserva reserva;
+        ReHabitacion reHabitacion;
         reserva = new Reserva();
         menuSelected = new Menu(1);
         perfilSelected = new Perfil(1);
         usuarioSelected = new Usuario(1);
         servicioSelected = new Servicio(1);
 
-//        for (Habitacion Habitacion : this.selectedHabitaciones) {
-//            c1.setTime(selectedFechaInicio);
-//            
-//            while (!c1.after(c2)) {
-//                reHabitacionPk = new ReHabitacionPK();
-//                reHabitacionPk.setFechaReservaHabitacion(c1.getTime());
-//                reHabitacionPk.setIdHabitacion(Habitacion.getIdHabitacion());
-//                reHabitacion = new ReHabitacion();
-//                reHabitacion.setReHabitacionPK(reHabitacionPk);
-//                reHabitacion.setHabitacion(Habitacion);
-//                
-//                listReHabitacion.add(reHabitacion);
-//                c1.add(Calendar.DAY_OF_MONTH, 1);
-//            }
-//            
-//            reserva.setReHabitacionList(listReHabitacion);
-//        }
+        
+        reserva.setReHabitacionList(listReHabitacion);
         //reserva.setIdReserva();
         reserva.setIdUsuario(usuarioSelected);
         reserva.setIdServicio(servicioSelected);
-        reserva.setFechaInicio(fechaActual);
-        reserva.setFechaFin(selectedFechaFin);
-        
+        reserva.setFechaInicio(c1.getTime());
+        reserva.setFechaFin(c2.getTime());
+        reserva.setCostoTotal(costoTotal);
+        reserva.setNumeroPersonas(3);
+        for (Habitacion Habitacion : this.selectedHabitaciones) {
+            
+            
+            while (!c1.after(c2)) {
+                reHabitacionPk = new ReHabitacionPK();
+                reHabitacionPk.setFechaReservaHabitacion(c1.getTime());
+                reHabitacionPk.setIdHabitacion(Habitacion.getIdHabitacion());
+                
+                reHabitacion = new ReHabitacion();
+                reHabitacion.setReHabitacionPK(reHabitacionPk);
+                reHabitacion.setHabitacion(Habitacion);
+                reHabitacion.setReserva(reserva);
+                listReHabitacion.add(reHabitacion);
+                c1.add(Calendar.DAY_OF_MONTH, 1);
+            }
+            
+            
+        }
         reservaJpaController.create(reserva);
     }
     
