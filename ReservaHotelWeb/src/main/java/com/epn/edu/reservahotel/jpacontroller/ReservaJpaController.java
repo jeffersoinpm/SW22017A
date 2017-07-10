@@ -79,15 +79,15 @@ public class ReservaJpaController implements Serializable {
                
                 idUsuario = em.merge(idUsuario);
             }
-            for (ReHabitacion reHabitacionListReHabitacion : reserva.getReHabitacionList()) {
-//                Reserva oldReservaOfReHabitacionListReHabitacion = reHabitacionListReHabitacion.getReserva();
-                reHabitacionListReHabitacion.setReserva(reserva);
-                reHabitacionListReHabitacion = em.merge(reHabitacionListReHabitacion);
-//                if (oldReservaOfReHabitacionListReHabitacion != null) {
-//                    oldReservaOfReHabitacionListReHabitacion.getReHabitacionList().remove(reHabitacionListReHabitacion);
-//                    oldReservaOfReHabitacionListReHabitacion = em.merge(oldReservaOfReHabitacionListReHabitacion);
-//                }
-            }
+//            for (ReHabitacion reHabitacionListReHabitacion : reserva.getReHabitacionList()) {
+////                Reserva oldReservaOfReHabitacionListReHabitacion = reHabitacionListReHabitacion.getReserva();
+//                reHabitacionListReHabitacion.setReserva(reserva);
+//                reHabitacionListReHabitacion = em.merge(reHabitacionListReHabitacion);
+////                if (oldReservaOfReHabitacionListReHabitacion != null) {
+////                    oldReservaOfReHabitacionListReHabitacion.getReHabitacionList().remove(reHabitacionListReHabitacion);
+////                    oldReservaOfReHabitacionListReHabitacion = em.merge(oldReservaOfReHabitacionListReHabitacion);
+////                }
+//            }
             utx.commit();
         } catch (Exception ex) {
             try {
