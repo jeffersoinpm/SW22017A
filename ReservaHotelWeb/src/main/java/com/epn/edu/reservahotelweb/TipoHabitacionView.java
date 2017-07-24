@@ -13,7 +13,6 @@ import com.epn.edu.reservahotel.entidades.Habitacion;
 import com.epn.edu.reservahotel.entidades.Reserva;
 import com.epn.edu.reservahotel.entidades.TipoHabitacion;
 import com.epn.edu.reservahotel.entidades.ReHabitacion;
-import com.epn.edu.reservahotel.entidades.ReHabitacionPK;
 import com.epn.edu.reservahotel.entidades.Servicio;
 import com.epn.edu.reservahotel.entidades.Menu;
 import com.epn.edu.reservahotel.entidades.Perfil;
@@ -27,12 +26,10 @@ import com.epn.edu.reservahotel.jpacontroller.ServicioJpaController;
 import com.epn.edu.reservahotel.jpacontrollers.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -46,18 +43,26 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 @ManagedBean(name = "tipoHabitacionView")
 public class TipoHabitacionView implements Serializable {
-    
+
     private List<TipoHabitacion> listTipoHbitacion;
     private List<Habitacion> lstHabitacion;
     private String selectedTipoHabitacion;
     private Date selectedFechaInicio;
     private String fechasSeleccionadas;
     private ReservaJpaController reservaJpaController;
-    private ReHabitacionPK reHabitacionPk;
     private Menu menuSelected;
     private Usuario usuarioSelected;
     private Perfil perfilSelected;
     private Servicio servicioSelected;
+    private Habitacion selectedHabitacion;
+
+    public Habitacion getSelectedHabitacion() {
+        return selectedHabitacion;
+    }
+
+    public void setSelectedHabitacion(Habitacion selectedHabitacion) {
+        this.selectedHabitacion = selectedHabitacion;
+    }
 
     public Servicio getServicioSelected() {
         return servicioSelected;
@@ -66,11 +71,11 @@ public class TipoHabitacionView implements Serializable {
     public void setServicioSelected(Servicio servicioSelected) {
         this.servicioSelected = servicioSelected;
     }
-    
+
     public String getFechasSeleccionadas() {
         return fechasSeleccionadas;
     }
-    
+
     public void setFechasSeleccionadas(String fechasSeleccionadas) {
         this.fechasSeleccionadas = fechasSeleccionadas;
     }
@@ -90,19 +95,19 @@ public class TipoHabitacionView implements Serializable {
     public void setListServicio(List<Servicio> listServicio) {
         this.listServicio = listServicio;
     }
-    
+
     public List<ReHabitacion> getListReHabitacion() {
         return listReHabitacion;
     }
-    
+
     public void setListReHabitacion(List<ReHabitacion> listReHabitacion) {
         this.listReHabitacion = listReHabitacion;
     }
-    
+
     public BigDecimal getCostoTotal() {
         return costoTotal;
     }
-    
+
     public void setCostoTotal(BigDecimal costoTotal) {
         this.costoTotal = costoTotal;
     }
@@ -115,10 +120,10 @@ public class TipoHabitacionView implements Serializable {
     private EntityManagerFactory emf;
     @Resource
     private UserTransaction utx;
-    
+
     public TipoHabitacionView() {
     }
-    
+
     @PostConstruct
     public void init() {
         //llenar cosas al iniciar
@@ -130,8 +135,7 @@ public class TipoHabitacionView implements Serializable {
         fechaActual = Calendar.getInstance().getTime();
         reservaJpaController = new ReservaJpaController(utx, emf);
         servicioJpaController = new ServicioJpaController(utx, emf);
-        
-        
+
 //        lstIdHabitacionesDisponibles = reHabitacionJpaController.findIdHabitacionByFecha(fechaActual);
 //        Integer[] ids = new Integer[lstIdHabitacionesDisponibles.size()];
 //        for (Integer idHabitacionesDisponible : lstIdHabitacionesDisponibles) {
@@ -143,11 +147,11 @@ public class TipoHabitacionView implements Serializable {
 
         //     System.out.println("seleccionado:"+ selectedTipoHabitacion.getIdTipoHabitacion());
     }
-    
+
     public void onDateSelect(SelectEvent event) {
         onChangeTipoHabitacionSelect();
     }
-    
+
     public void onChangeTipoHabitacionSelect() {
         // System.out.println("entro, tipo habitacionseleccionada:"+selectedTipoHabitacion+" Inicio: "+selectedFechaInicio+" FIn: "+selectedFechaFin+"evento :"+event.getObject().toString());
         if (selectedTipoHabitacion != null && selectedFechaInicio == null && selectedFechaFin == null) {
@@ -189,14 +193,14 @@ public class TipoHabitacionView implements Serializable {
                 cabeceraTabla = "No existen habitaciones disponibles para estos filtros";
             }
             System.out.println("Tamaño lista " + lstHabitacion.size());
-            
+
         } else if (selectedTipoHabitacion == null && selectedFechaInicio != null && selectedFechaFin == null) {
             System.out.println("solo inicio para :" + selectedFechaInicio);
             lstHabitacion = habitacionJpaController.findHabitacionesDisponiblesUnDia(selectedFechaInicio);
             fechasSeleccionadas = dateFormat.format(selectedFechaInicio);
             if (!lstHabitacion.isEmpty()) {
                 cabeceraTabla = "Habitaciones disponibles para el " + dateFormat.format(selectedFechaInicio);
-                
+
             } else {
                 cabeceraTabla = "No existen habitaciones disponibles para estos filtros";
             }
@@ -206,11 +210,11 @@ public class TipoHabitacionView implements Serializable {
             fechasSeleccionadas = dateFormat.format(fechaActual);
         }
     }
-    
+
     public Date fechaMaximaReserva() {
-        
+
         Calendar calendar = Calendar.getInstance();
-        
+
         calendar.setTime(fechaActual); // Configuramos la fecha que se recibe
 
         calendar.add(Calendar.YEAR, 1);  // numero de días a añadir, o restar en caso de días<0
@@ -218,23 +222,23 @@ public class TipoHabitacionView implements Serializable {
         return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
 
     }
-    
+
     public Date getFechaActual() {
         return fechaActual;
     }
-    
+
     public void setFechaActual(Date fechaActual) {
         this.fechaActual = fechaActual;
     }
-    
+
     public String getCabeceraTabla() {
         return cabeceraTabla;
     }
-    
+
     public void setCabeceraTabla(String cabeceraTabla) {
         this.cabeceraTabla = cabeceraTabla;
     }
-    
+
     public void setSelectedHabitaciones(List<Habitacion> selectedHabitaciones) {
         costoTotal = BigDecimal.ZERO;
         for (Habitacion habitacion : selectedHabitaciones) {
@@ -242,38 +246,35 @@ public class TipoHabitacionView implements Serializable {
             BigDecimal valorExtras = habitacion.getIdExtraHabitacion().getCostoTotal();
             costoTotal = costoTotal.add(valorExtras).add(valorHabitacion);
         }
-        
+
         this.selectedHabitaciones = selectedHabitaciones;
     }
-    
+
     public void registroRerservaHabitacion() throws RollbackFailureException, Exception {
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
-        
+
         listReHabitacion = new ArrayList();
         if (selectedFechaInicio == null) {
             c1.setTime(fechaActual);
-        }else{
+        } else {
             c1.setTime(selectedFechaInicio);
         }
-        if(selectedFechaFin==null){
+        if (selectedFechaFin == null) {
             c2.setTime(fechaActual);
             c2.add(Calendar.DATE, 1);
-        }else{
+        } else {
             c2.setTime(selectedFechaFin);
         }
-        
-        
+
         Reserva reserva;
-        ReHabitacion reHabitacion;
+
         reserva = new Reserva();
         menuSelected = new Menu(1);
         perfilSelected = new Perfil(1);
         usuarioSelected = new Usuario(1);
         servicioSelected = new Servicio(1);
 
-        
-        reserva.setReHabitacionList(listReHabitacion);
         //reserva.setIdReserva();
         reserva.setIdUsuario(usuarioSelected);
         reserva.setIdServicio(servicioSelected);
@@ -281,69 +282,75 @@ public class TipoHabitacionView implements Serializable {
         reserva.setFechaFin(c2.getTime());
         reserva.setCostoTotal(costoTotal);
         reserva.setNumeroPersonas(3);
+        System.out.println("Habitaciones seleccionadas:" + this.selectedHabitaciones.size());
         for (Habitacion Habitacion : this.selectedHabitaciones) {
-            
-            
+
             while (!c1.after(c2)) {
-                reHabitacionPk = new ReHabitacionPK();
+                System.out.println("fecha:"+c1);
+                ReHabitacionPK reHabitacionPk = new ReHabitacionPK();
                 reHabitacionPk.setFechaReservaHabitacion(c1.getTime());
                 reHabitacionPk.setIdHabitacion(Habitacion.getIdHabitacion());
-                
-                reHabitacion = new ReHabitacion();
+                ReHabitacion reHabitacion = new ReHabitacion();
                 reHabitacion.setReHabitacionPK(reHabitacionPk);
                 reHabitacion.setHabitacion(Habitacion);
-                reHabitacion.setReserva(reserva);
+                reHabitacion.setIdReserva(reserva);
                 listReHabitacion.add(reHabitacion);
                 c1.add(Calendar.DAY_OF_MONTH, 1);
             }
-            
-            
+            c1.setTime(reserva.getFechaInicio());
         }
+        reserva.setReHabitacionList(listReHabitacion);
         reservaJpaController.create(reserva);
+        System.out.println("Reserva luego de guardar:" + reserva);
+
+        for (ReHabitacion reHabitacion1 : listReHabitacion) {
+            reHabitacionJpaController.create(reHabitacion1);
+        }
+
     }
-    
+
     public List<Habitacion> getSelectedHabitaciones() {
         return selectedHabitaciones;
     }
-    
+
     public List<Habitacion> getLstHabitacion() {
         return lstHabitacion;
     }
-    
+
     public void setLstHabitacion(List<Habitacion> lstHabitacion) {
         this.lstHabitacion = lstHabitacion;
     }
-    
+
     public String getSelectedTipoHabitacion() {
         return selectedTipoHabitacion;
     }
-    
+
     public Date getSelectedFechaFin() {
         return selectedFechaFin;
     }
-    
+
     public void setSelectedFechaFin(Date selectedFechaFin) {
         this.selectedFechaFin = selectedFechaFin;
     }
-    
+
     public Date getSelectedFechaInicio() {
         return selectedFechaInicio;
     }
-    
+
     public void setSelectedFechaInicio(Date selectedFechaInicio) {
         this.selectedFechaInicio = selectedFechaInicio;
     }
-    
+
     public void setSelectedTipoHabitacion(String selectedTipoHabitacion) {
         this.selectedTipoHabitacion = selectedTipoHabitacion;
     }
-    
+
     public List<TipoHabitacion> getListTipoHbitacion() {
         return listTipoHbitacion;
     }
-    
+
     public void setListTipoHbitacion(List<TipoHabitacion> listTipoHbitacion) {
         this.listTipoHbitacion = listTipoHbitacion;
     }
-    
+
 }

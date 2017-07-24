@@ -14,10 +14,9 @@ import com.epn.edu.reservahotel.entidades.Servicio;
 import com.epn.edu.reservahotel.entidades.Usuario;
 import com.epn.edu.reservahotel.entidades.ReHabitacion;
 import com.epn.edu.reservahotel.entidades.Reserva;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.IllegalOrphanException;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.NonexistentEntityException;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.PreexistingEntityException;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.RollbackFailureException;
+import com.epn.edu.reservahotel.jpacontroller.exceptions.IllegalOrphanException;
+import com.epn.edu.reservahotel.jpacontroller.exceptions.NonexistentEntityException;
+import com.epn.edu.reservahotel.jpacontroller.exceptions.RollbackFailureException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,7 +25,7 @@ import javax.transaction.UserTransaction;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 public class ReservaJpaController implements Serializable {
 
@@ -41,7 +40,7 @@ public class ReservaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Reserva reserva) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(Reserva reserva) throws RollbackFailureException, Exception {
         if (reserva.getReHabitacionList() == null) {
             reserva.setReHabitacionList(new ArrayList<ReHabitacion>());
         }
@@ -65,28 +64,23 @@ public class ReservaJpaController implements Serializable {
                 attachedReHabitacionList.add(reHabitacionListReHabitacionToAttach);
             }
             reserva.setReHabitacionList(attachedReHabitacionList);
-            System.out.println("aun no guardo la reserva "+reserva);
-            System.out.println(reserva.getIdServicio());
-            System.out.println(reserva.getIdUsuario());
             em.persist(reserva);
-            System.out.println("Ya guardo la reserva "+reserva);
             if (idServicio != null) {
                 idServicio.getReservaList().add(reserva);
                 idServicio = em.merge(idServicio);
             }
             if (idUsuario != null) {
                 idUsuario.getReservaList().add(reserva);
-               
                 idUsuario = em.merge(idUsuario);
             }
 //            for (ReHabitacion reHabitacionListReHabitacion : reserva.getReHabitacionList()) {
-////                Reserva oldReservaOfReHabitacionListReHabitacion = reHabitacionListReHabitacion.getReserva();
-//                reHabitacionListReHabitacion.setReserva(reserva);
+//                Reserva oldIdReservaOfReHabitacionListReHabitacion = reHabitacionListReHabitacion.getIdReserva();
+//                reHabitacionListReHabitacion.setIdReserva(reserva);
 //                reHabitacionListReHabitacion = em.merge(reHabitacionListReHabitacion);
-////                if (oldReservaOfReHabitacionListReHabitacion != null) {
-////                    oldReservaOfReHabitacionListReHabitacion.getReHabitacionList().remove(reHabitacionListReHabitacion);
-////                    oldReservaOfReHabitacionListReHabitacion = em.merge(oldReservaOfReHabitacionListReHabitacion);
-////                }
+//                if (oldIdReservaOfReHabitacionListReHabitacion != null) {
+//                    oldIdReservaOfReHabitacionListReHabitacion.getReHabitacionList().remove(reHabitacionListReHabitacion);
+//                    oldIdReservaOfReHabitacionListReHabitacion = em.merge(oldIdReservaOfReHabitacionListReHabitacion);
+//                }
 //            }
             utx.commit();
         } catch (Exception ex) {
@@ -95,10 +89,6 @@ public class ReservaJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            System.out.println(ex.getLocalizedMessage());
-//            if (findReserva(reserva.getIdReserva()) != null) {
-//                throw new PreexistingEntityException("Reserva " + reserva + " already exists.", ex);
-//            }
             throw ex;
         } finally {
             if (em != null) {
@@ -125,7 +115,7 @@ public class ReservaJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain ReHabitacion " + reHabitacionListOldReHabitacion + " since its reserva field is not nullable.");
+                    illegalOrphanMessages.add("You must retain ReHabitacion " + reHabitacionListOldReHabitacion + " since its idReserva field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -165,12 +155,12 @@ public class ReservaJpaController implements Serializable {
             }
             for (ReHabitacion reHabitacionListNewReHabitacion : reHabitacionListNew) {
                 if (!reHabitacionListOld.contains(reHabitacionListNewReHabitacion)) {
-                    Reserva oldReservaOfReHabitacionListNewReHabitacion = reHabitacionListNewReHabitacion.getReserva();
-                    reHabitacionListNewReHabitacion.setReserva(reserva);
+                    Reserva oldIdReservaOfReHabitacionListNewReHabitacion = reHabitacionListNewReHabitacion.getIdReserva();
+                    reHabitacionListNewReHabitacion.setIdReserva(reserva);
                     reHabitacionListNewReHabitacion = em.merge(reHabitacionListNewReHabitacion);
-                    if (oldReservaOfReHabitacionListNewReHabitacion != null && !oldReservaOfReHabitacionListNewReHabitacion.equals(reserva)) {
-                        oldReservaOfReHabitacionListNewReHabitacion.getReHabitacionList().remove(reHabitacionListNewReHabitacion);
-                        oldReservaOfReHabitacionListNewReHabitacion = em.merge(oldReservaOfReHabitacionListNewReHabitacion);
+                    if (oldIdReservaOfReHabitacionListNewReHabitacion != null && !oldIdReservaOfReHabitacionListNewReHabitacion.equals(reserva)) {
+                        oldIdReservaOfReHabitacionListNewReHabitacion.getReHabitacionList().remove(reHabitacionListNewReHabitacion);
+                        oldIdReservaOfReHabitacionListNewReHabitacion = em.merge(oldIdReservaOfReHabitacionListNewReHabitacion);
                     }
                 }
             }
@@ -214,7 +204,7 @@ public class ReservaJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Reserva (" + reserva + ") cannot be destroyed since the ReHabitacion " + reHabitacionListOrphanCheckReHabitacion + " in its reHabitacionList field has a non-nullable reserva field.");
+                illegalOrphanMessages.add("This Reserva (" + reserva + ") cannot be destroyed since the ReHabitacion " + reHabitacionListOrphanCheckReHabitacion + " in its reHabitacionList field has a non-nullable idReserva field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

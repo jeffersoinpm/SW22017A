@@ -26,8 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ReHabitacion.findAll", query = "SELECT r FROM ReHabitacion r"),
     @NamedQuery(name = "ReHabitacion.findByFechaReservaHabitacion", query = "SELECT r FROM ReHabitacion r WHERE r.reHabitacionPK.fechaReservaHabitacion = :fechaReservaHabitacion"),
-    @NamedQuery(name = "ReHabitacion.findByIdHabitacion", query = "SELECT r FROM ReHabitacion r WHERE r.reHabitacionPK.idHabitacion = :idHabitacion"),
-    @NamedQuery(name = "ReHabitacion.findByIdReserva", query = "SELECT r FROM ReHabitacion r WHERE r.reHabitacionPK.idReserva = :idReserva")})
+    @NamedQuery(name = "ReHabitacion.findByIdHabitacion", query = "SELECT r FROM ReHabitacion r WHERE r.reHabitacionPK.idHabitacion = :idHabitacion")})
 public class ReHabitacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,9 +35,9 @@ public class ReHabitacion implements Serializable {
     @JoinColumn(name = "id_habitacion", referencedColumnName = "id_habitacion", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Habitacion habitacion;
-    @JoinColumn(name = "id_reserva", referencedColumnName = "id_reserva", insertable = false, updatable = false)
+    @JoinColumn(name = "id_reserva", referencedColumnName = "id_reserva")
     @ManyToOne(optional = false)
-    private Reserva reserva;
+    private Reserva idReserva;
 
     public ReHabitacion() {
     }
@@ -47,8 +46,8 @@ public class ReHabitacion implements Serializable {
         this.reHabitacionPK = reHabitacionPK;
     }
 
-    public ReHabitacion(Date fechaReservaHabitacion, int idHabitacion, int idReserva) {
-        this.reHabitacionPK = new ReHabitacionPK(fechaReservaHabitacion, idHabitacion, idReserva);
+    public ReHabitacion(Date fechaReservaHabitacion, int idHabitacion) {
+        this.reHabitacionPK = new ReHabitacionPK(fechaReservaHabitacion, idHabitacion);
     }
 
     public ReHabitacionPK getReHabitacionPK() {
@@ -67,12 +66,12 @@ public class ReHabitacion implements Serializable {
         this.habitacion = habitacion;
     }
 
-    public Reserva getReserva() {
-        return reserva;
+    public Reserva getIdReserva() {
+        return idReserva;
     }
 
-    public void setReserva(Reserva reserva) {
-        this.reserva = reserva;
+    public void setIdReserva(Reserva idReserva) {
+        this.idReserva = idReserva;
     }
 
     @Override

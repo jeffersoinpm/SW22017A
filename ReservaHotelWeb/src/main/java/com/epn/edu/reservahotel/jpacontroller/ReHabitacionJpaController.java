@@ -14,9 +14,9 @@ import com.epn.edu.reservahotel.entidades.Habitacion;
 import com.epn.edu.reservahotel.entidades.ReHabitacion;
 import com.epn.edu.reservahotel.entidades.ReHabitacionPK;
 import com.epn.edu.reservahotel.entidades.Reserva;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.NonexistentEntityException;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.PreexistingEntityException;
-import com.epn.edu.reservahotel.jpacontrollers.exceptions.RollbackFailureException;
+import com.epn.edu.reservahotel.jpacontroller.exceptions.NonexistentEntityException;
+import com.epn.edu.reservahotel.jpacontroller.exceptions.PreexistingEntityException;
+import com.epn.edu.reservahotel.jpacontroller.exceptions.RollbackFailureException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,7 +24,7 @@ import javax.transaction.UserTransaction;
 
 /**
  *
- * @author Daniela Ramos
+ * @author jefferson
  */
 public class ReHabitacionJpaController implements Serializable {
 
@@ -43,7 +43,6 @@ public class ReHabitacionJpaController implements Serializable {
         if (reHabitacion.getReHabitacionPK() == null) {
             reHabitacion.setReHabitacionPK(new ReHabitacionPK());
         }
-        reHabitacion.getReHabitacionPK().setIdReserva(reHabitacion.getReserva().getIdReserva());
         reHabitacion.getReHabitacionPK().setIdHabitacion(reHabitacion.getHabitacion().getIdHabitacion());
         EntityManager em = null;
         try {
@@ -54,19 +53,19 @@ public class ReHabitacionJpaController implements Serializable {
                 habitacion = em.getReference(habitacion.getClass(), habitacion.getIdHabitacion());
                 reHabitacion.setHabitacion(habitacion);
             }
-            Reserva reserva = reHabitacion.getReserva();
-            if (reserva != null) {
-                reserva = em.getReference(reserva.getClass(), reserva.getIdReserva());
-                reHabitacion.setReserva(reserva);
+            Reserva idReserva = reHabitacion.getIdReserva();
+            if (idReserva != null) {
+                idReserva = em.getReference(idReserva.getClass(), idReserva.getIdReserva());
+                reHabitacion.setIdReserva(idReserva);
             }
             em.persist(reHabitacion);
             if (habitacion != null) {
                 habitacion.getReHabitacionList().add(reHabitacion);
                 habitacion = em.merge(habitacion);
             }
-            if (reserva != null) {
-                reserva.getReHabitacionList().add(reHabitacion);
-                reserva = em.merge(reserva);
+            if (idReserva != null) {
+                idReserva.getReHabitacionList().add(reHabitacion);
+                idReserva = em.merge(idReserva);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -87,7 +86,6 @@ public class ReHabitacionJpaController implements Serializable {
     }
 
     public void edit(ReHabitacion reHabitacion) throws NonexistentEntityException, RollbackFailureException, Exception {
-        reHabitacion.getReHabitacionPK().setIdReserva(reHabitacion.getReserva().getIdReserva());
         reHabitacion.getReHabitacionPK().setIdHabitacion(reHabitacion.getHabitacion().getIdHabitacion());
         EntityManager em = null;
         try {
@@ -96,15 +94,15 @@ public class ReHabitacionJpaController implements Serializable {
             ReHabitacion persistentReHabitacion = em.find(ReHabitacion.class, reHabitacion.getReHabitacionPK());
             Habitacion habitacionOld = persistentReHabitacion.getHabitacion();
             Habitacion habitacionNew = reHabitacion.getHabitacion();
-            Reserva reservaOld = persistentReHabitacion.getReserva();
-            Reserva reservaNew = reHabitacion.getReserva();
+            Reserva idReservaOld = persistentReHabitacion.getIdReserva();
+            Reserva idReservaNew = reHabitacion.getIdReserva();
             if (habitacionNew != null) {
                 habitacionNew = em.getReference(habitacionNew.getClass(), habitacionNew.getIdHabitacion());
                 reHabitacion.setHabitacion(habitacionNew);
             }
-            if (reservaNew != null) {
-                reservaNew = em.getReference(reservaNew.getClass(), reservaNew.getIdReserva());
-                reHabitacion.setReserva(reservaNew);
+            if (idReservaNew != null) {
+                idReservaNew = em.getReference(idReservaNew.getClass(), idReservaNew.getIdReserva());
+                reHabitacion.setIdReserva(idReservaNew);
             }
             reHabitacion = em.merge(reHabitacion);
             if (habitacionOld != null && !habitacionOld.equals(habitacionNew)) {
@@ -115,13 +113,13 @@ public class ReHabitacionJpaController implements Serializable {
                 habitacionNew.getReHabitacionList().add(reHabitacion);
                 habitacionNew = em.merge(habitacionNew);
             }
-            if (reservaOld != null && !reservaOld.equals(reservaNew)) {
-                reservaOld.getReHabitacionList().remove(reHabitacion);
-                reservaOld = em.merge(reservaOld);
+            if (idReservaOld != null && !idReservaOld.equals(idReservaNew)) {
+                idReservaOld.getReHabitacionList().remove(reHabitacion);
+                idReservaOld = em.merge(idReservaOld);
             }
-            if (reservaNew != null && !reservaNew.equals(reservaOld)) {
-                reservaNew.getReHabitacionList().add(reHabitacion);
-                reservaNew = em.merge(reservaNew);
+            if (idReservaNew != null && !idReservaNew.equals(idReservaOld)) {
+                idReservaNew.getReHabitacionList().add(reHabitacion);
+                idReservaNew = em.merge(idReservaNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -162,10 +160,10 @@ public class ReHabitacionJpaController implements Serializable {
                 habitacion.getReHabitacionList().remove(reHabitacion);
                 habitacion = em.merge(habitacion);
             }
-            Reserva reserva = reHabitacion.getReserva();
-            if (reserva != null) {
-                reserva.getReHabitacionList().remove(reHabitacion);
-                reserva = em.merge(reserva);
+            Reserva idReserva = reHabitacion.getIdReserva();
+            if (idReserva != null) {
+                idReserva.getReHabitacionList().remove(reHabitacion);
+                idReserva = em.merge(idReserva);
             }
             em.remove(reHabitacion);
             utx.commit();

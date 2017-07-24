@@ -30,18 +30,13 @@ public class ReHabitacionPK implements Serializable {
     @NotNull
     @Column(name = "id_habitacion")
     private int idHabitacion;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_reserva")
-    private int idReserva;
 
     public ReHabitacionPK() {
     }
 
-    public ReHabitacionPK(Date fechaReservaHabitacion, int idHabitacion, int idReserva) {
+    public ReHabitacionPK(Date fechaReservaHabitacion, int idHabitacion) {
         this.fechaReservaHabitacion = fechaReservaHabitacion;
         this.idHabitacion = idHabitacion;
-        this.idReserva = idReserva;
     }
 
     public Date getFechaReservaHabitacion() {
@@ -60,20 +55,11 @@ public class ReHabitacionPK implements Serializable {
         this.idHabitacion = idHabitacion;
     }
 
-    public int getIdReserva() {
-        return idReserva;
-    }
-
-    public void setIdReserva(int idReserva) {
-        this.idReserva = idReserva;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (fechaReservaHabitacion != null ? fechaReservaHabitacion.hashCode() : 0);
         hash += (int) idHabitacion;
-        hash += (int) idReserva;
         return hash;
     }
 
@@ -90,15 +76,12 @@ public class ReHabitacionPK implements Serializable {
         if (this.idHabitacion != other.idHabitacion) {
             return false;
         }
-        if (this.idReserva != other.idReserva) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "com.epn.edu.reservahotel.entidades.ReHabitacionPK[ fechaReservaHabitacion=" + fechaReservaHabitacion + ", idHabitacion=" + idHabitacion + ", idReserva=" + idReserva + " ]";
+        return "com.epn.edu.reservahotel.entidades.ReHabitacionPK[ fechaReservaHabitacion=" + fechaReservaHabitacion + ", idHabitacion=" + idHabitacion + " ]";
     }
     
 }

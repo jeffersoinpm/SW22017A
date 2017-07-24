@@ -47,7 +47,7 @@ public class Reserva implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Basic(optional = false)
+    @Basic(optional = false)
     @Column(name = "id_reserva")
     private Integer idReserva;
     @Basic(optional = false)
@@ -69,7 +69,7 @@ public class Reserva implements Serializable {
     @NotNull
     @Column(name = "numero_personas")
     private int numeroPersonas;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idReserva")
     private List<ReHabitacion> reHabitacionList;
     @JoinColumn(name = "id_servicio", referencedColumnName = "id_servicio")
     @ManyToOne(optional = false)

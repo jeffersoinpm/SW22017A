@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="title">
-        Reserva de Habitaciones1- <span class="subitem">Reserva</span>
+        Reserva de Habitaciones- <span class="subitem">Reserva</span>
     </ui:define>
 
     <ui:define name="description">
@@ -36,8 +36,8 @@
         </h:form>
 
     </ui:define>
-    
-    
+
+
     <ui:define name="source">
         <h:form id="tabla">
             <p:dataTable id="listaHabitaciones" var="habitacion" value="#{tipoHabitacionView.lstHabitacion}" selection="#{tipoHabitacionView.selectedHabitaciones}" rowKey="#{habitacion.idHabitacion}" style="margin-bottom:0">
@@ -62,11 +62,26 @@
                 <p:column headerText="Precio">
                     <h:outputText value="#{habitacion.idTipoHabitacion.costo}" />
                 </p:column>
-                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:column headerText="Visualizar" style="width:75px;text-align: center">
+                    <p:commandButton update=":tabla:carDetail" oncomplete="PF('imagenDialog').show()" icon="ui-icon-search" title="View">
+                        <f:setPropertyActionListener value="#{habitacion}" target="#{tipoHabitacionView.selectedHabitacion}" />
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="Seleccionar" selectionMode="multiple" style="width:75px;text-align:center"/>
                 <f:facet name="footer">
                     <p:commandButton process="listaHabitaciones"  update=":tabla:habitacionDetail" icon="ui-icon-search" value="Reserva" oncomplete="PF('habitacionDialog').show()" />
                 </f:facet>
             </p:dataTable>
+
+            <p:overlayPanel widgetVar="imagenDialog" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+                <p:outputPanel id="carDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty tipoHabitacionView.selectedHabitacion}" columnClasses="label,value">
+                        <f:facet name="header">
+                            <p:graphicImage name="demo/images/habitacion-#{tipoHabitacionView.selectedHabitacion.idTipoHabitacion.descripcion}#{tipoHabitacionView.selectedHabitacion.idHabitacion}.png"/> 
+                        </f:facet>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:overlayPanel>
             <p:dialog header="Información Reserva" widgetVar="habitacionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="habitacionDetail" style="text-align:center;">
                     <p:outputLabel value="Fecha:#{tipoHabitacionView.fechasSeleccionadas}"/>
