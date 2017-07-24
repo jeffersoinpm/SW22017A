@@ -75,10 +75,11 @@
 
             <p:overlayPanel widgetVar="imagenDialog" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
                 <p:outputPanel id="carDetail" style="text-align:center;">
-                    <p:panelGrid  columns="2" rendered="#{not empty tipoHabitacionView.selectedHabitacion}" columnClasses="label,value">
+                    <p:panelGrid  columns="1" rendered="#{not empty tipoHabitacionView.selectedHabitacion}" columnClasses="label,value">
                         <f:facet name="header">
                             <p:graphicImage name="demo/images/habitacion-#{tipoHabitacionView.selectedHabitacion.idTipoHabitacion.descripcion}#{tipoHabitacionView.selectedHabitacion.idHabitacion}.png"/> 
                         </f:facet>
+                        <p:outputLabel value="#{tipoHabitacionView.selectedHabitacion.idTipoHabitacion.descripcion}#{tipoHabitacionView.selectedHabitacion.idHabitacion}"/>
                     </p:panelGrid>
                 </p:outputPanel>
             </p:overlayPanel>
@@ -90,10 +91,13 @@
                     </ui:repeat>
                     <p:outputLabel style="columns: 1" value="Valor Total:#{tipoHabitacionView.costoTotal}"/>
                     <br/>
+                    <p:outputLabel value="Número de Personas:" for="numPersonas"/>
+                    <p:spinner id="numPersonas" value="#{tipoHabitacionView.numeroPersonas}" min="0" max="100" required="true"/>
+                    <br/>
                     <h:outputText  style="columns: 2" value="Desayuno: " />
-                    <p:selectBooleanCheckbox  value="#{selectBooleanView.value1}" />
+                    <p:selectBooleanCheckbox  value="#{tipoHabitacionView.servicioDesayuno}" />
                     <h:outputText value="Parqueadero: " />
-                    <p:selectBooleanCheckbox style="columns: 5" value="#{selectBooleanView.value1}" />
+                    <p:selectBooleanCheckbox style="columns: 5" value="#{tipoHabitacionView.servicioParqueadero}" />
 
                     <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}"/>
 

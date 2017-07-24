@@ -35,8 +35,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.UserTransaction;
 import org.primefaces.event.SelectEvent;
 
@@ -55,6 +58,33 @@ public class TipoHabitacionView implements Serializable {
     private Perfil perfilSelected;
     private Servicio servicioSelected;
     private Habitacion selectedHabitacion;
+    private Integer numeroPersonas;
+    private boolean servicioParqueadero;
+    private boolean servicioDesayuno;
+
+    public boolean isServicioParqueadero() {
+        return servicioParqueadero;
+    }
+
+    public void setServicioParqueadero(boolean servicioParqueadero) {
+        this.servicioParqueadero = servicioParqueadero;
+    }
+
+    public boolean isServicioDesayuno() {
+        return servicioDesayuno;
+    }
+
+    public void setServicioDesayuno(boolean servicioDesayuno) {
+        this.servicioDesayuno = servicioDesayuno;
+    }
+
+    public Integer getNumeroPersonas() {
+        return numeroPersonas;
+    }
+
+    public void setNumeroPersonas(Integer numeroPersonas) {
+        this.numeroPersonas = numeroPersonas;
+    }
 
     public Habitacion getSelectedHabitacion() {
         return selectedHabitacion;
@@ -261,19 +291,27 @@ public class TipoHabitacionView implements Serializable {
             c1.setTime(selectedFechaInicio);
         }
         if (selectedFechaFin == null) {
-            c2.setTime(fechaActual);
+            c2.setTime(c1.getTime());
             c2.add(Calendar.DATE, 1);
         } else {
             c2.setTime(selectedFechaFin);
         }
-
+        if (servicioDesayuno && servicioParqueadero) {
+            servicioSelected = servicioJpaController.findServicio(1);
+        } else if (!servicioDesayuno && servicioParqueadero) {
+            servicioSelected = servicioJpaController.findServicio(3);
+        } else if (servicioDesayuno && !servicioParqueadero) {
+            servicioSelected = servicioJpaController.findServicio(2);
+        } else {
+            servicioSelected = servicioJpaController.findServicio(4);
+        }
+        this.costoTotal = this.costoTotal.add(servicioSelected.getCostoTotal());
         Reserva reserva;
 
         reserva = new Reserva();
         menuSelected = new Menu(1);
         perfilSelected = new Perfil(1);
         usuarioSelected = new Usuario(1);
-        servicioSelected = new Servicio(1);
 
         //reserva.setIdReserva();
         reserva.setIdUsuario(usuarioSelected);
@@ -281,12 +319,11 @@ public class TipoHabitacionView implements Serializable {
         reserva.setFechaInicio(c1.getTime());
         reserva.setFechaFin(c2.getTime());
         reserva.setCostoTotal(costoTotal);
-        reserva.setNumeroPersonas(3);
+        reserva.setNumeroPersonas(this.numeroPersonas);
         System.out.println("Habitaciones seleccionadas:" + this.selectedHabitaciones.size());
         for (Habitacion Habitacion : this.selectedHabitaciones) {
 
             while (!c1.after(c2)) {
-                System.out.println("fecha:"+c1);
                 ReHabitacionPK reHabitacionPk = new ReHabitacionPK();
                 reHabitacionPk.setFechaReservaHabitacion(c1.getTime());
                 reHabitacionPk.setIdHabitacion(Habitacion.getIdHabitacion());
@@ -306,6 +343,9 @@ public class TipoHabitacionView implements Serializable {
         for (ReHabitacion reHabitacion1 : listReHabitacion) {
             reHabitacionJpaController.create(reHabitacion1);
         }
+
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
 
     }
 
