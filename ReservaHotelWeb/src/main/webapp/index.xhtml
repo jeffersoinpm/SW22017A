@@ -75,7 +75,7 @@
 
             <p:overlayPanel widgetVar="imagenDialog" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
                 <p:outputPanel id="carDetail" style="text-align:center;">
-                    <p:panelGrid  columns="1" rendered="#{not empty tipoHabitacionView.selectedHabitacion}" columnClasses="label,value">
+                    <p:panelGrid  columns="1" rendered="#{not empty tipoHabitacionView.selectedHabitacion}">
                         <f:facet name="header">
                             <p:graphicImage name="demo/images/habitacion-#{tipoHabitacionView.selectedHabitacion.idTipoHabitacion.descripcion}#{tipoHabitacionView.selectedHabitacion.idHabitacion}.png"/> 
                         </f:facet>
