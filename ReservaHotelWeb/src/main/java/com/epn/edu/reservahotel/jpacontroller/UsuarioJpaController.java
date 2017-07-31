@@ -256,4 +256,19 @@ public class UsuarioJpaController implements Serializable {
         }
     }
     
+    public List<Usuario> findUserbyUserAndPassword(String user, String password) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Usuario.findByContraseniaAndName", Usuario.class);
+            query.setParameter("nombreUsuario", user);
+            query.setParameter("contrasenia", password);
+            List<Usuario> results = query.getResultList();
+
+            return (List<Usuario>) results;
+
+        } finally {
+            em.close();
+        }
+    }
+    
 }
