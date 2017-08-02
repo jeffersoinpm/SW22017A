@@ -256,11 +256,11 @@ public class UsuarioJpaController implements Serializable {
         }
     }
     
-    public List<Usuario> findUserbyUserAndPassword(String user, String password) {
+    public List<Usuario> findUserbyEmailAndPassword(String email, String password) {
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createNamedQuery("Usuario.findByContraseniaAndName", Usuario.class);
-            query.setParameter("nombreUsuario", user);
+            Query query = em.createNamedQuery("Usuario.findByContraseniaAndCorreo", Usuario.class);
+            query.setParameter("correo", email);
             query.setParameter("contrasenia", password);
             List<Usuario> results = query.getResultList();
 
@@ -270,5 +270,7 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
+    
+
     
 }

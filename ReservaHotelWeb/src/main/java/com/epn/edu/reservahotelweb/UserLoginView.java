@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @ManagedBean(name = "userLoginView")
 public class UserLoginView implements Serializable{
      
-    private String username;
+    private String email;
      
     private String password;
  
@@ -44,12 +44,12 @@ public class UserLoginView implements Serializable{
         
     }
     
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
  
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
  
     public String getPassword() {
@@ -72,11 +72,11 @@ public class UserLoginView implements Serializable{
         RequestContext context = RequestContext.getCurrentInstance();
         FacesMessage message = null;
         boolean loggedIn = false;
-        System.out.println(this.username + " , " + this.password);
-        List<Usuario> listUsuario = userController.findUserbyUserAndPassword(username, password);
+        System.out.println(this.email + " , " + this.password);
+        List<Usuario> listUsuario = userController.findUserbyEmailAndPassword(email, password);
         if(listUsuario != null){
             loggedIn = true;
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", email);
             
             try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
