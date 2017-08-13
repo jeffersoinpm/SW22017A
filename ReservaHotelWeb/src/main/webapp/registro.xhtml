@@ -10,7 +10,7 @@
 <h:head>
 </h:head>
 <h:body>
-    <h1>Prince of Persia</h1>
+    <h1 align="center">Prince of Persia</h1>
 
 	<h:form> 
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
@@ -32,14 +32,15 @@
                         <h:outputLabel for="password" value="Password:" />
                         <p:password id="password" value="#{userRegisterView.password}" required="true" label="password" />
                         <f:facet name="footer">
-                            <p:commandButton value="Registrer" update="growl" actionListener="#{userRegisterView.register}"
+                            <p:commandButton value="Registrar" update="growl" actionListener="#{userRegisterView.register}"
                                              oncomplete="handleLoginRequest(xhr, status, args)" />
                         </f:facet>  
                     </h:panelGrid>
+                    <p:link outcome="inicio" value="Volver"/>
                 </p:panel>
         </h:form>
-    <p:link outcome="inicio" value="Volver">
-    </p:link>
+    
+    
 
 </h:body>
 </html>

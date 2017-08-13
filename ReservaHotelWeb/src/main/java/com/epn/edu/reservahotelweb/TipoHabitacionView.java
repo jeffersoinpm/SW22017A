@@ -34,7 +34,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManagerFactory;
@@ -43,7 +44,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.UserTransaction;
 import org.primefaces.event.SelectEvent;
 
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "tipoHabitacionView")
 public class TipoHabitacionView implements Serializable {
 
@@ -61,6 +62,8 @@ public class TipoHabitacionView implements Serializable {
     private Integer numeroPersonas;
     private boolean servicioParqueadero;
     private boolean servicioDesayuno;
+    @ManagedProperty("#{userloginView}")
+    UserLoginView loginView;
 
     public boolean isServicioParqueadero() {
         return servicioParqueadero;
@@ -311,7 +314,8 @@ public class TipoHabitacionView implements Serializable {
         reserva = new Reserva();
         menuSelected = new Menu(1);
         perfilSelected = new Perfil(1);
-        usuarioSelected = new Usuario(1);
+        System.out.println("Dato"+loginView.getIdUsuario());
+        usuarioSelected = new Usuario(loginView.getIdUsuario());
 
         //reserva.setIdReserva();
         reserva.setIdUsuario(usuarioSelected);
@@ -349,6 +353,15 @@ public class TipoHabitacionView implements Serializable {
 
     }
 
+    public UserLoginView getLoginView() {
+        return loginView;
+    }
+
+    public void setLoginView(UserLoginView loginView) {
+        this.loginView = loginView;
+    }
+
+    
     public List<Habitacion> getSelectedHabitaciones() {
         return selectedHabitaciones;
     }

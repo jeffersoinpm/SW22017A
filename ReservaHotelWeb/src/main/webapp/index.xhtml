@@ -97,7 +97,10 @@
                     <p:selectBooleanCheckbox  value="#{tipoHabitacionView.servicioDesayuno}" />
                     <h:outputText value="Parqueadero: " />
                     <p:selectBooleanCheckbox style="columns: 5" value="#{tipoHabitacionView.servicioParqueadero}" />
-
+                    <br/>
+                    <p:outputLabel value="Usuario:#{userloginView.nombreUsuario}" />
+                    <p:outputLabel style="visibility: hidden" value="#{userloginView.idUsuario}"/>
+                    <br/>
                     <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}"/>
 
                 </p:outputPanel>
