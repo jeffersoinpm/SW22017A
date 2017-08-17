@@ -83,28 +83,22 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-    
+
     @GET
-    @Path("findUserbyEmailAndPassword/{email}/{pasword}")
+    @Path("findUserbyEmailAndPassword/{email}/{password}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Usuario> findUserbyEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password) {
-        EntityManager em = getEntityManager();
-        try {
-            Query query = em.createNamedQuery("Usuario.findByContraseniaAndCorreo", Usuario.class);
-            query.setParameter("correo", email);
-            query.setParameter("contrasenia", password);
-            List<Usuario> results = query.getResultList();
+        Query query = em.createNamedQuery("Usuario.findByContraseniaAndCorreo", Usuario.class);
+        query.setParameter("correo", email);
+        query.setParameter("contrasenia", password);
+        List<Usuario> results = query.getResultList();
 
-            return (List<Usuario>) results;
-
-        } finally {
-            em.close();
-        }
+        return (List<Usuario>) results;
     }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

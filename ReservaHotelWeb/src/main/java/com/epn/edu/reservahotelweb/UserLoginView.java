@@ -1,5 +1,6 @@
 package com.epn.edu.reservahotelweb;
 
+import com.epn.edu.reservahotel.clientesServRest.UsuarioFacadeRest;
 import com.epn.edu.reservahotel.entidades.Usuario;
 import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
@@ -13,6 +14,9 @@ import javax.transaction.UserTransaction;
 import org.primefaces.context.RequestContext;
 
 import com.epn.edu.reservahotel.jpacontroller.UsuarioJpaController;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -44,12 +48,15 @@ public class UserLoginView implements Serializable {
         this.nombreUsuario = nombreUsuario;
     }
 
-    UsuarioJpaController userController;
+    UsuarioFacadeRest userController;
 
     @PersistenceUnit(unitName = "com.epn.edu_ReservaHotelWeb_war_1.0-SNAPSHOTPU")
     private EntityManagerFactory emf;
     @Resource
     private UserTransaction utx;
+
+    private GsonBuilder builder = new GsonBuilder();
+    private Gson gson = builder.setDateFormat("yyyy-MM-dd").create();
 
     public UserLoginView() {
 
@@ -73,9 +80,7 @@ public class UserLoginView implements Serializable {
 
     @PostConstruct
     public void init() {
-        userController = new UsuarioJpaController(utx, emf);
-        String nombre = userController.findUsuario(new Integer(1)).getNombreUsuario();
-        System.out.println("Usuario: " + nombre);
+        userController = new UsuarioFacadeRest();
     }
 
     public void login(ActionEvent event) {
@@ -83,7 +88,9 @@ public class UserLoginView implements Serializable {
         FacesMessage message = null;
         boolean loggedIn = false;
         System.out.println(this.email + " , " + this.password);
-        List<Usuario> listUsuario = userController.findUserbyEmailAndPassword(email, password);
+        String usuario = userController.findUserbyEmailAndPassword_JSON(String.class, email, password);
+        List<Usuario> listUsuario = gson.fromJson(usuario, new TypeToken<List<Usuario>>() {
+        }.getType());
         boolean logeado = false;
         if (listUsuario != null) {
             loggedIn = true;

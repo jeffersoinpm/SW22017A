@@ -6,6 +6,9 @@
 package com.epn.edu.serviciosrestfull.service;
 
 import com.epn.edu.reservahotel.entidades.Habitacion;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -89,88 +92,79 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     @Path("findHabitacionbyTypeHabitacionId/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Habitacion> findHabitacionbyTypeHabitacionId(@PathParam("id") Integer id) {
-        EntityManager em = getEntityManager();
-        try {
+       
             List<Habitacion> results = em.createNamedQuery("Habitacion.findByIdTipoHabitacion", Habitacion.class)
                     .setParameter("idTipoHabitacion", id).getResultList();
 
             return (List<Habitacion>) results;
 
-        } finally {
-            em.close();
-        }
     }
 
     @GET
-    @Path("findHabitacionesDisponiblesUnDia/{fechaActual}")
+    @Path("/findHabitacionesDisponiblesUnDia/{fechaActual}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Habitacion> findHabitacionesDisponiblesUnDia(@PathParam("fechaActual") Date fechaActual) {
-        EntityManager em = getEntityManager();
-        try {
-
+    public List<Habitacion> findHabitacionesDisponiblesUnDia(@PathParam("fechaActual") String fechaActual) throws ParseException {
+            System.out.println("llego");
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+            Date d=dateFormat.parse(fechaActual);
+            
             List<Habitacion> results = em.createNamedQuery("Habitacion.findDisponiblesByUnDia", Habitacion.class)
-                    .setParameter("fechaReservaHabitacion", fechaActual).getResultList();
+                    .setParameter("fechaReservaHabitacion", d).getResultList();
 
             return (List<Habitacion>) results;
 
-        } finally {
-            em.close();
-        }
     }
     
     @GET
     @Path("findHabitacionesDisponiblesUnDiaAndTipoHabitacion/{fechaActual}/{idTipoHabitacion}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Habitacion> findHabitacionesDisponiblesUnDiaAndTipoHabitacion(@PathParam("fechaActual") Date fechaActual, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) {
-        EntityManager em = getEntityManager();
-        try {
+    public List<Habitacion> findHabitacionesDisponiblesUnDiaAndTipoHabitacion(@PathParam("fechaActual") String fechaActual, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) throws ParseException {
+       
             Query query = em.createNamedQuery("Habitacion.findDisponiblesByUnDiaAndTipoHabitacion", Habitacion.class);
-            query.setParameter("fechaReservaHabitacion", fechaActual);
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+            Date d=dateFormat.parse(fechaActual);
+            query.setParameter("fechaReservaHabitacion", d);
             query.setParameter("idTipoHabitacion", idTipoHabitacion);
             List<Habitacion> results = query.getResultList();
 
             return (List<Habitacion>) results;
 
-        } finally {
-            em.close();
-        }
     }
     
     @GET
     @Path("findHabitacionesDisponiblesRangoDias/{fechaInicio}/{fechaFin}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Habitacion> findHabitacionesDisponiblesRangoDias(@PathParam("fechaInicio") Date fechaInicio, @PathParam("fechaFin") Date fechaFin) {
-        EntityManager em = getEntityManager();
-        try {
+    public List<Habitacion> findHabitacionesDisponiblesRangoDias(@PathParam("fechaInicio") String fechaInicio, @PathParam("fechaFin") String fechaFin) throws ParseException {
+        
             Query query = em.createNamedQuery("Habitacion.findDisponiblesByRangoDias", Habitacion.class);
-            query.setParameter("fechaReservaHabitacionInicio", fechaInicio);
-            query.setParameter("fechaReservaHabitacionfin", fechaFin);
+            
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+            Date d=dateFormat.parse(fechaInicio);
+            Date b=dateFormat.parse(fechaFin);
+            query.setParameter("fechaReservaHabitacionInicio", d);
+            query.setParameter("fechaReservaHabitacionfin", b);
             List<Habitacion> results = query.getResultList();
 
             return (List<Habitacion>) results;
 
-        } finally {
-            em.close();
-        }
     }
     
     @GET
     @Path("findHabitacionesDisponiblesRangoDiasAndTipoHabitacion/{fechaInicio}/{fechaFin}/{idTipoHabitacion}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Habitacion> findHabitacionesDisponiblesRangoDiasAndTipoHabitacion(@PathParam("fechaInicio") Date fechaInicio, @PathParam("fechaFin") Date fechaFin, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) {
-        EntityManager em = getEntityManager();
-        try {
+    public List<Habitacion> findHabitacionesDisponiblesRangoDiasAndTipoHabitacion(@PathParam("fechaInicio") String fechaInicio, @PathParam("fechaFin") String fechaFin, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) throws ParseException {
+       
             Query query = em.createNamedQuery("Habitacion.findDisponiblesByRangoDiasAndTipoHabitacion", Habitacion.class);
-            query.setParameter("fechaReservaHabitacionInicio", fechaInicio);
-            query.setParameter("fechaReservaHabitacionfin", fechaFin);
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+            Date d=dateFormat.parse(fechaInicio);
+            Date b=dateFormat.parse(fechaFin);
+            query.setParameter("fechaReservaHabitacionInicio", d);
+            query.setParameter("fechaReservaHabitacionfin", b);
             query.setParameter("idTipoHabitacion", idTipoHabitacion);
             List<Habitacion> results = query.getResultList();
 
             return (List<Habitacion>) results;
 
-        } finally {
-            em.close();
-        }
     }
 
     @Override

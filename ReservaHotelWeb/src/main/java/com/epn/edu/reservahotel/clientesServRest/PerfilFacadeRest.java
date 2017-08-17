@@ -26,7 +26,7 @@ public class PerfilFacadeRest {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:80/serviciosRestFull/webresources";
+    private static final String BASE_URI = "http://localhost:8080/serviciosRestFull/webresources";
 
     public PerfilFacadeRest() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
