@@ -101,10 +101,19 @@
                     <p:outputLabel value="Usuario:#{userloginView.nombreUsuario}" />
                     <p:outputLabel style="visibility: hidden" value="#{userloginView.idUsuario}"/>
                     <br/>
-                    <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}"/>
+                    <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}" oncomplete="handleReserveRequest(xhr, status, args)"/>
 
                 </p:outputPanel>
             </p:dialog>
+            <script type="text/javascript">
+                function handleReserveRequest(xhr, status, args) {
+                    if (args.estaGuardado) {
+                        setTimeout(function () {
+                            window.location = args.view;
+                        }, 500);
+                    }
+                }
+            </script>
         </h:form>
 
     </ui:define>

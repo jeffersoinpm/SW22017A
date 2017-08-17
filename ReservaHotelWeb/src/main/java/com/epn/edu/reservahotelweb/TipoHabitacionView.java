@@ -1,21 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.epn.edu.reservahotelweb;
 
-/**
- *
- * @author Daniela Ramos
- */
 import com.epn.edu.reservahotel.entidades.Habitacion;
 import com.epn.edu.reservahotel.entidades.Reserva;
 import com.epn.edu.reservahotel.entidades.TipoHabitacion;
 import com.epn.edu.reservahotel.entidades.ReHabitacion;
 import com.epn.edu.reservahotel.entidades.Servicio;
-import com.epn.edu.reservahotel.entidades.Menu;
-import com.epn.edu.reservahotel.entidades.Perfil;
 import com.epn.edu.reservahotel.entidades.ReHabitacionPK;
 import com.epn.edu.reservahotel.entidades.Usuario;
 import com.epn.edu.reservahotel.jpacontroller.HabitacionJpaController;
@@ -35,7 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManagerFactory;
@@ -44,7 +33,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.UserTransaction;
 import org.primefaces.event.SelectEvent;
 
-@SessionScoped
+/**
+ *
+ * @author Jefferson Paredes
+ */
+@ViewScoped
 @ManagedBean(name = "tipoHabitacionView")
 public class TipoHabitacionView implements Serializable {
 
@@ -54,9 +47,7 @@ public class TipoHabitacionView implements Serializable {
     private Date selectedFechaInicio;
     private String fechasSeleccionadas;
     private ReservaJpaController reservaJpaController;
-    private Menu menuSelected;
     private Usuario usuarioSelected;
-    private Perfil perfilSelected;
     private Servicio servicioSelected;
     private Habitacion selectedHabitacion;
     private Integer numeroPersonas;
@@ -312,9 +303,7 @@ public class TipoHabitacionView implements Serializable {
         Reserva reserva;
 
         reserva = new Reserva();
-        menuSelected = new Menu(1);
-        perfilSelected = new Perfil(1);
-        System.out.println("Dato"+loginView.getIdUsuario());
+        System.out.println("Dato" + loginView.getIdUsuario());
         usuarioSelected = new Usuario(loginView.getIdUsuario());
 
         //reserva.setIdReserva();
@@ -343,11 +332,9 @@ public class TipoHabitacionView implements Serializable {
         reserva.setReHabitacionList(listReHabitacion);
         reservaJpaController.create(reserva);
         System.out.println("Reserva luego de guardar:" + reserva);
-
         for (ReHabitacion reHabitacion1 : listReHabitacion) {
             reHabitacionJpaController.create(reHabitacion1);
         }
-
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
 
@@ -361,7 +348,6 @@ public class TipoHabitacionView implements Serializable {
         this.loginView = loginView;
     }
 
-    
     public List<Habitacion> getSelectedHabitaciones() {
         return selectedHabitaciones;
     }
