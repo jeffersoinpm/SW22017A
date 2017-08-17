@@ -86,7 +86,7 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     }
     
     @GET
-    @Path("{id}")
+    @Path("findHabitacionbyTypeHabitacionId/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Habitacion> findHabitacionbyTypeHabitacionId(@PathParam("id") Integer id) {
         EntityManager em = getEntityManager();

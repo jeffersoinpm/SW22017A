@@ -85,13 +85,13 @@ public class HabitacionFacadeRest {
 
     public <T> T findHabitacionbyTypeHabitacionId_XML(Class<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionbyTypeHabitacionId/{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     public <T> T findHabitacionbyTypeHabitacionId_JSON(Class<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionbyTypeHabitacionId/{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
