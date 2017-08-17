@@ -24,3 +24,4 @@ hs_err_pid*
 /ReservaHotelWeb/target/
 ReservaHotelWeb/target/*
 ReservaHotelWeb/target/
+/serviciosRestFull/target/
