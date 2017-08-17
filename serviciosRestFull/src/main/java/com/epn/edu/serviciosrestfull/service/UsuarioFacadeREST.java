@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -81,6 +82,24 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    @GET
+    @Path("{email}/{pasword}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Usuario> findUserbyEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Usuario.findByContraseniaAndCorreo", Usuario.class);
+            query.setParameter("correo", email);
+            query.setParameter("contrasenia", password);
+            List<Usuario> results = query.getResultList();
+
+            return (List<Usuario>) results;
+
+        } finally {
+            em.close();
+        }
     }
 
     @Override

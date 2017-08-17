@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -83,6 +84,22 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+    
+    @GET
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Habitacion> findHabitacionbyTypeHabitacionId(@PathParam("id") Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            List<Habitacion> results = em.createNamedQuery("Habitacion.findByIdTipoHabitacion", Habitacion.class)
+                    .setParameter("idTipoHabitacion", id).getResultList();
+
+            return (List<Habitacion>) results;
+
+        } finally {
+            em.close();
+        }
+    }
 
     @GET
     @Path("{fechaActual}")
@@ -93,6 +110,61 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
 
             List<Habitacion> results = em.createNamedQuery("Habitacion.findDisponiblesByUnDia", Habitacion.class)
                     .setParameter("fechaReservaHabitacion", fechaActual).getResultList();
+
+            return (List<Habitacion>) results;
+
+        } finally {
+            em.close();
+        }
+    }
+    
+    @GET
+    @Path("{fechaActual}/{idTipoHabitacion}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Habitacion> findHabitacionesDisponiblesUnDiaAndTipoHabitacion(@PathParam("fechaActual") Date fechaActual, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Habitacion.findDisponiblesByUnDiaAndTipoHabitacion", Habitacion.class);
+            query.setParameter("fechaReservaHabitacion", fechaActual);
+            query.setParameter("idTipoHabitacion", idTipoHabitacion);
+            List<Habitacion> results = query.getResultList();
+
+            return (List<Habitacion>) results;
+
+        } finally {
+            em.close();
+        }
+    }
+    
+    @GET
+    @Path("{fechaInicio}/{fechaFin}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Habitacion> findHabitacionesDisponiblesRangoDias(@PathParam("fechaInicio") Date fechaInicio, @PathParam("fechaFin") Date fechaFin) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Habitacion.findDisponiblesByRangoDias", Habitacion.class);
+            query.setParameter("fechaReservaHabitacionInicio", fechaInicio);
+            query.setParameter("fechaReservaHabitacionfin", fechaFin);
+            List<Habitacion> results = query.getResultList();
+
+            return (List<Habitacion>) results;
+
+        } finally {
+            em.close();
+        }
+    }
+    
+    @GET
+    @Path("{fechaInicio}/{fechaFin}/{idTipoHabitacion}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Habitacion> findHabitacionesDisponiblesRangoDiasAndTipoHabitacion(@PathParam("fechaInicio") Date fechaInicio, @PathParam("fechaFin") Date fechaFin, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Habitacion.findDisponiblesByRangoDiasAndTipoHabitacion", Habitacion.class);
+            query.setParameter("fechaReservaHabitacionInicio", fechaInicio);
+            query.setParameter("fechaReservaHabitacionfin", fechaFin);
+            query.setParameter("idTipoHabitacion", idTipoHabitacion);
+            List<Habitacion> results = query.getResultList();
 
             return (List<Habitacion>) results;
 

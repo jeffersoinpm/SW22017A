@@ -20,17 +20,29 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author jefferson
+ * @author danie
  */
 public class UsuarioFacadeRest {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:80/serviciosRestFull/webresources";
+    private static final String BASE_URI = "http://localhost:8080/serviciosRestFull/webresources";
 
     public UsuarioFacadeRest() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("com.epn.edu.reservahotel.entidades.usuario");
+    }
+
+    public <T> T findUserbyEmailAndPassword_XML(Class<T> responseType, String email, String pasword) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{email, pasword}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findUserbyEmailAndPassword_JSON(Class<T> responseType, String email, String pasword) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{email, pasword}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public String countREST() throws ClientErrorException {
