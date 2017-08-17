@@ -6,6 +6,7 @@
 package com.epn.edu.serviciosrestfull.service;
 
 import com.epn.edu.reservahotel.entidades.Habitacion;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -83,9 +84,26 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
         return String.valueOf(super.count());
     }
 
+    @GET
+    @Path("{fechaActual}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Habitacion> findHabitacionesDisponiblesUnDia(@PathParam("fechaActual") Date fechaActual) {
+        EntityManager em = getEntityManager();
+        try {
+
+            List<Habitacion> results = em.createNamedQuery("Habitacion.findDisponiblesByUnDia", Habitacion.class)
+                    .setParameter("fechaReservaHabitacion", fechaActual).getResultList();
+
+            return (List<Habitacion>) results;
+
+        } finally {
+            em.close();
+        }
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }
