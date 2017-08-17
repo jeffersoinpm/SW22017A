@@ -85,7 +85,7 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     }
     
     @GET
-    @Path("{email}/{pasword}")
+    @Path("findUserbyEmailAndPassword/{email}/{pasword}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Usuario> findUserbyEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password) {
         EntityManager em = getEntityManager();

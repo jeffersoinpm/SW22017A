@@ -5,8 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="title">
-        Reserva de Habitaciones- <span class="subitem">Reserva</span>
-    </ui:define>
+        Cancelar Reserva- <span class="subitem">Cancelar</span>
+    </ui:define><!--
 
     <ui:define name="description">
         Debe ingresar los datos con los que desea realizar su reserva.
@@ -38,12 +38,15 @@
     </ui:define>
 
 
-    <ui:define name="source">
+    --><ui:define name="source">
         <h:form id="tabla">
             <p:dataTable id="listaHabitaciones" var="habitacion" value="#{tipoHabitacionView.lstHabitacion}" selection="#{tipoHabitacionView.selectedHabitaciones}" rowKey="#{habitacion.idHabitacion}" style="margin-bottom:0">
                 <f:facet name="header">
-                    #{tipoHabitacionView.cabeceraTabla}
+                    #{cancelacionReservasView.cabeceraTabla}
                 </f:facet>
+                <p:column headerText="Reserva">
+                    <h:outputText value="#{habitacion.idHabitacion}" />
+                </p:column>
                 <p:column headerText="Número de habitación">
                     <h:outputText value="#{habitacion.idHabitacion}" />
                 </p:column>
@@ -72,7 +75,6 @@
                     <p:commandButton process="listaHabitaciones"  update=":tabla:habitacionDetail" icon="ui-icon-search" value="Reserva" oncomplete="PF('habitacionDialog').show()" />
                 </f:facet>
             </p:dataTable>
-
             <p:overlayPanel widgetVar="imagenDialog" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
                 <p:outputPanel id="carDetail" style="text-align:center;">
                     <p:panelGrid  columns="1" rendered="#{not empty tipoHabitacionView.selectedHabitacion}">
@@ -102,7 +104,6 @@
                     <p:outputLabel style="visibility: hidden" value="#{userloginView.idUsuario}"/>
                     <br/>
                     <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}" oncomplete="handleReserveRequest(xhr, status, args)"/>
-
                 </p:outputPanel>
             </p:dialog>
             <script type="text/javascript">
@@ -115,7 +116,5 @@
                 }
             </script>
         </h:form>
-
     </ui:define>
-
 </ui:composition>

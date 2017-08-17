@@ -35,13 +35,13 @@ public class UsuarioFacadeRest {
 
     public <T> T findUserbyEmailAndPassword_XML(Class<T> responseType, String email, String pasword) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{email, pasword}));
+        resource = resource.path(java.text.MessageFormat.format("findUserbyEmailAndPassword/{0}/{1}", new Object[]{email, pasword}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     public <T> T findUserbyEmailAndPassword_JSON(Class<T> responseType, String email, String pasword) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{email, pasword}));
+        resource = resource.path(java.text.MessageFormat.format("findUserbyEmailAndPassword/{0}/{1}", new Object[]{email, pasword}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 

@@ -35,13 +35,13 @@ public class HabitacionFacadeRest {
 
     public <T> T findHabitacionesDisponiblesRangoDiasAndTipoHabitacion_XML(Class<T> responseType, String fechaInicio, String fechaFin, String idTipoHabitacion) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}/{2}", new Object[]{fechaInicio, fechaFin, idTipoHabitacion}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesRangoDiasAndTipoHabitacion/{0}/{1}/{2}", new Object[]{fechaInicio, fechaFin, idTipoHabitacion}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     public <T> T findHabitacionesDisponiblesRangoDiasAndTipoHabitacion_JSON(Class<T> responseType, String fechaInicio, String fechaFin, String idTipoHabitacion) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}/{2}", new Object[]{fechaInicio, fechaFin, idTipoHabitacion}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesRangoDiasAndTipoHabitacion/{0}/{1}/{2}", new Object[]{fechaInicio, fechaFin, idTipoHabitacion}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
@@ -115,25 +115,25 @@ public class HabitacionFacadeRest {
 
     public <T> T findHabitacionesDisponiblesUnDia_XML(Class<T> responseType, String fechaActual) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{fechaActual}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesUnDia/{0}", new Object[]{fechaActual}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     public <T> T findHabitacionesDisponiblesUnDia_JSON(Class<T> responseType, String fechaActual) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{fechaActual}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesUnDia/{0}", new Object[]{fechaActual}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public <T> T findHabitacionesDisponiblesRangoDias_XML(Class<T> responseType, String fechaInicio, String fechaFin) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{fechaInicio, fechaFin}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesRangoDias/{0}/{1}", new Object[]{fechaInicio, fechaFin}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     public <T> T findHabitacionesDisponiblesRangoDias_JSON(Class<T> responseType, String fechaInicio, String fechaFin) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{fechaInicio, fechaFin}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesRangoDias/{0}/{1}", new Object[]{fechaInicio, fechaFin}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
@@ -143,13 +143,13 @@ public class HabitacionFacadeRest {
 
     public <T> T findHabitacionesDisponiblesUnDiaAndTipoHabitacion_XML(Class<T> responseType, String fechaActual, String idTipoHabitacion) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{fechaActual, idTipoHabitacion}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesUnDiaAndTipoHabitacion/{0}/{1}", new Object[]{fechaActual, idTipoHabitacion}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     public <T> T findHabitacionesDisponiblesUnDiaAndTipoHabitacion_JSON(Class<T> responseType, String fechaActual, String idTipoHabitacion) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{fechaActual, idTipoHabitacion}));
+        resource = resource.path(java.text.MessageFormat.format("findHabitacionesDisponiblesUnDiaAndTipoHabitacion/{0}/{1}", new Object[]{fechaActual, idTipoHabitacion}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 

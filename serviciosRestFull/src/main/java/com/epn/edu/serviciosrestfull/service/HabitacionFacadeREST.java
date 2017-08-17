@@ -102,7 +102,7 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     }
 
     @GET
-    @Path("{fechaActual}")
+    @Path("findHabitacionesDisponiblesUnDia/{fechaActual}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Habitacion> findHabitacionesDisponiblesUnDia(@PathParam("fechaActual") Date fechaActual) {
         EntityManager em = getEntityManager();
@@ -119,7 +119,7 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     }
     
     @GET
-    @Path("{fechaActual}/{idTipoHabitacion}")
+    @Path("findHabitacionesDisponiblesUnDiaAndTipoHabitacion/{fechaActual}/{idTipoHabitacion}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Habitacion> findHabitacionesDisponiblesUnDiaAndTipoHabitacion(@PathParam("fechaActual") Date fechaActual, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) {
         EntityManager em = getEntityManager();
@@ -137,7 +137,7 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     }
     
     @GET
-    @Path("{fechaInicio}/{fechaFin}")
+    @Path("findHabitacionesDisponiblesRangoDias/{fechaInicio}/{fechaFin}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Habitacion> findHabitacionesDisponiblesRangoDias(@PathParam("fechaInicio") Date fechaInicio, @PathParam("fechaFin") Date fechaFin) {
         EntityManager em = getEntityManager();
@@ -155,7 +155,7 @@ public class HabitacionFacadeREST extends AbstractFacade<Habitacion> {
     }
     
     @GET
-    @Path("{fechaInicio}/{fechaFin}/{idTipoHabitacion}")
+    @Path("findHabitacionesDisponiblesRangoDiasAndTipoHabitacion/{fechaInicio}/{fechaFin}/{idTipoHabitacion}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Habitacion> findHabitacionesDisponiblesRangoDiasAndTipoHabitacion(@PathParam("fechaInicio") Date fechaInicio, @PathParam("fechaFin") Date fechaFin, @PathParam("idTipoHabitacion") Integer idTipoHabitacion) {
         EntityManager em = getEntityManager();
