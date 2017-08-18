@@ -17,19 +17,19 @@
                 <p:panel id="loginPnl" header="Registro"
                          style="width: 350px; margin: 0 auto;">
                     <h:panelGrid columns="2" cellpadding="5">
-                        <h:outputLabel for="username" value="Username:" />
+                        <h:outputLabel for="username" value="Nombre de Usuario:" />
                         <p:inputText id="username" value="#{userRegisterView.username}" required="true" label="username" />
 
-                        <h:outputLabel for="email" value="Email" />
+                        <h:outputLabel for="email" value="Email:" />
                         <p:inputText id="email" value="#{userRegisterView.email}" required="true" label="email" />
 
-                        <h:outputLabel for="address" value="Address" />
+                        <h:outputLabel for="address" value="Dirección:" />
                         <p:inputText id="address" value="#{userRegisterView.address}" required="true" label="address" />
 
-                        <h:outputLabel for="phone" value="Phone" />
+                        <h:outputLabel for="phone" value="Teléfono:" />
                         <p:inputText id="phone" value="#{userRegisterView.phone}" required="true" label="phone" />
                         
-                        <h:outputLabel for="password" value="Password:" />
+                        <h:outputLabel for="password" value="Contraseña:" />
                         <p:password id="password" value="#{userRegisterView.password}" required="true" label="password" />
                         <f:facet name="footer">
                             <p:commandButton value="Registrar" update="growl" actionListener="#{userRegisterView.register}"
