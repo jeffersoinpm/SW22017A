@@ -89,6 +89,7 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Usuario> findUserbyEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password) {
         Query query = em.createNamedQuery("Usuario.findByContraseniaAndCorreo", Usuario.class);
+        System.out.println("usario:"+email+","+password); 
         query.setParameter("correo", email);
         query.setParameter("contrasenia", password);
         List<Usuario> results = query.getResultList();

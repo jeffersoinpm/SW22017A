@@ -87,19 +87,24 @@
                     <p:outputLabel value="Fecha:#{tipoHabitacionView.fechasSeleccionadas}"/>
                     <ui:repeat value="#{tipoHabitacionView.selectedHabitaciones}" var="habitacion1">
                         <h:outputText value="Habitación: #{habitacion1.idHabitacion} - Costo: #{habitacion1.idTipoHabitacion.costo} - ValorExtras #{habitacion1.idExtraHabitacion.costoTotal}"  style="display:block"/>
+                        <br/>
                     </ui:repeat>
                     <p:outputLabel style="columns: 1" value="Valor Total:#{tipoHabitacionView.costoTotal}"/>
                     <br/>
+                    <br/>
                     <p:outputLabel value="Número de Personas:" for="numPersonas"/>
                     <p:spinner id="numPersonas" value="#{tipoHabitacionView.numeroPersonas}" min="0" max="100" required="true"/>
+                    <br/>
                     <br/>
                     <h:outputText  style="columns: 2" value="Desayuno: " />
                     <p:selectBooleanCheckbox  value="#{tipoHabitacionView.servicioDesayuno}" />
                     <h:outputText value="Parqueadero: " />
                     <p:selectBooleanCheckbox style="columns: 5" value="#{tipoHabitacionView.servicioParqueadero}" />
                     <br/>
+                    <br/>
                     <p:outputLabel value="Usuario:#{userloginView.nombreUsuario}" />
                     <p:outputLabel style="visibility: hidden" value="#{userloginView.idUsuario}"/>
+                    <br/>
                     <br/>
                     <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}" oncomplete="handleReserveRequest(xhr, status, args)"/>
 

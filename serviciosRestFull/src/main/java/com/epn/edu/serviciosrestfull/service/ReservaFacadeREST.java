@@ -5,7 +5,10 @@
  */
 package com.epn.edu.serviciosrestfull.service;
 
+import com.epn.edu.reservahotel.entidades.Habitacion;
+import com.epn.edu.reservahotel.entidades.ReHabitacion;
 import com.epn.edu.reservahotel.entidades.Reserva;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -39,7 +42,19 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Reserva entity) {
-        super.create(entity);
+        List<ReHabitacion> pepe = entity.getReHabitacionList();
+        System.out.println("pepe zize:"+pepe.size());
+        entity.setReHabitacionList(new ArrayList<ReHabitacion>());
+        em.persist(entity);
+        System.out.println("guardo la reserva");
+        System.out.println(entity);
+        System.out.println("pepe zize 1:"+pepe.size());
+        for (ReHabitacion item : pepe) {
+            entity.setIdReserva(this.count()+1);
+            item.setIdReserva(entity);
+            em.persist(item);
+        };
+
     }
 
     @PUT
@@ -87,5 +102,5 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

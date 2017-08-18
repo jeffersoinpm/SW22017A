@@ -12,6 +12,8 @@ import com.epn.edu.reservahotel.entidades.ReHabitacion;
 import com.epn.edu.reservahotel.entidades.Servicio;
 import com.epn.edu.reservahotel.entidades.ReHabitacionPK;
 import com.epn.edu.reservahotel.entidades.Usuario;
+import com.epn.edu.reservahotel.jpacontroller.ReHabitacionJpaController;
+import com.epn.edu.reservahotel.jpacontroller.ReservaJpaController;
 import com.epn.edu.reservahotel.jpacontrollers.exceptions.RollbackFailureException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -315,17 +317,21 @@ public class TipoHabitacionView implements Serializable {
             c2.setTime(selectedFechaFin);
         }
         if (servicioDesayuno && servicioParqueadero) {
-            String servicio=servicioJpaController.find_JSON(String.class,""+1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>(){}.getType());
+            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
+            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
+            }.getType());
         } else if (!servicioDesayuno && servicioParqueadero) {
-            String servicio=servicioJpaController.find_JSON(String.class,""+1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>(){}.getType());
+            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
+            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
+            }.getType());
         } else if (servicioDesayuno && !servicioParqueadero) {
-            String servicio=servicioJpaController.find_JSON(String.class,""+1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>(){}.getType());
+            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
+            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
+            }.getType());
         } else {
-            String servicio=servicioJpaController.find_JSON(String.class,""+1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>(){}.getType());
+            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
+            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
+            }.getType());
         }
         this.costoTotal = this.costoTotal.add(servicioSelected.getCostoTotal());
         Reserva reserva;
@@ -358,10 +364,13 @@ public class TipoHabitacionView implements Serializable {
             c1.setTime(reserva.getFechaInicio());
         }
         reserva.setReHabitacionList(listReHabitacion);
-        reservaJpaController.create_JSON(reserva);
+        System.out.println(listReHabitacion.size());
+        ReservaJpaController jpaController=new ReservaJpaController(utx, emf);
+        ReHabitacionJpaController jpaController1=new ReHabitacionJpaController(utx, emf);
+        jpaController.create(reserva);
         System.out.println("Reserva luego de guardar:" + reserva);
         for (ReHabitacion reHabitacion1 : listReHabitacion) {
-            reHabitacionJpaController.create_JSON(reHabitacion1);
+            jpaController1.create(reHabitacion1);
         }
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());

@@ -26,7 +26,7 @@ public class ExtraHabitacionFacadeRest {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/serviciosRestFull/webresources";
+    private static final String BASE_URI = "http://35.163.187.30:8080/serviciosRestFull/webresources";
 
     public ExtraHabitacionFacadeRest() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
