@@ -10,6 +10,7 @@ import com.epn.edu.reservahotel.entidades.Perfil;
 import com.epn.edu.reservahotel.entidades.Usuario;
 import com.epn.edu.reservahotel.jpacontroller.UsuarioJpaController;
 import com.epn.edu.reservahotel.jpacontrollers.exceptions.RollbackFailureException;
+import static com.epn.edu.reservahotelweb.SendEmail.generateAndSendEmail;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -127,6 +128,9 @@ public class UserRegisterView {
             try {
                 usuarioController.create(usuario);
                 System.out.println("Usuario creado");
+                generateAndSendEmail(username, email);
+		System.out.println("\n\n ===> Your Java Program has just sent an Email successfully. Check your email..");
+
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", email);
             
                 try {
