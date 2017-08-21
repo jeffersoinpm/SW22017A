@@ -1,10 +1,5 @@
 package com.epn.edu.reservahotelweb;
 
-import com.epn.edu.reservahotel.clientesServRest.HabitacionFacadeRest;
-import com.epn.edu.reservahotel.clientesServRest.ReHabitacionFacadeRest;
-import com.epn.edu.reservahotel.clientesServRest.ReservaFacadeRest;
-import com.epn.edu.reservahotel.clientesServRest.ServicioFacadeRest;
-import com.epn.edu.reservahotel.clientesServRest.TipoHabitacionFacadeRest;
 import com.epn.edu.reservahotel.entidades.Habitacion;
 import com.epn.edu.reservahotel.entidades.Reserva;
 import com.epn.edu.reservahotel.entidades.TipoHabitacion;
@@ -12,12 +7,12 @@ import com.epn.edu.reservahotel.entidades.ReHabitacion;
 import com.epn.edu.reservahotel.entidades.Servicio;
 import com.epn.edu.reservahotel.entidades.ReHabitacionPK;
 import com.epn.edu.reservahotel.entidades.Usuario;
+import com.epn.edu.reservahotel.jpacontroller.HabitacionJpaController;
 import com.epn.edu.reservahotel.jpacontroller.ReHabitacionJpaController;
 import com.epn.edu.reservahotel.jpacontroller.ReservaJpaController;
+import com.epn.edu.reservahotel.jpacontroller.ServicioJpaController;
+import com.epn.edu.reservahotel.jpacontroller.TipoHabitacionJpaController;
 import com.epn.edu.reservahotel.jpacontrollers.exceptions.RollbackFailureException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -51,11 +46,11 @@ public class TipoHabitacionView implements Serializable {
     private String selectedTipoHabitacion;
     private Date selectedFechaInicio;
     private String fechasSeleccionadas;
-    private ReservaFacadeRest reservaJpaController;
     private Usuario usuarioSelected;
     private Servicio servicioSelected;
     private Habitacion selectedHabitacion;
     private Integer numeroPersonas;
+    private Integer tamanioHabitaciones;
     private boolean servicioParqueadero;
     private boolean servicioDesayuno;
     @ManagedProperty("#{userloginView}")
@@ -71,20 +66,27 @@ public class TipoHabitacionView implements Serializable {
     private List<Servicio> listServicio;
 
     List<Integer> lstIdHabitacionesDisponibles;
-    TipoHabitacionFacadeRest tipoHabitacionJpaController;
-    ReHabitacionFacadeRest reHabitacionJpaController;
-    HabitacionFacadeRest habitacionJpaController;
-    ServicioFacadeRest servicioJpaController;
+    TipoHabitacionJpaController tipoHabitacionJpaController;
+    ReHabitacionJpaController reHabitacionJpaController;
+    HabitacionJpaController habitacionJpaController;
+    ServicioJpaController servicioJpaController;
     @PersistenceUnit(unitName = "com.epn.edu_ReservaHotelWeb_war_1.0-SNAPSHOTPU")
     private EntityManagerFactory emf;
     @Resource
     private UserTransaction utx;
 
-    private GsonBuilder builder = new GsonBuilder();
-    private Gson gson = builder.setDateFormat("yyyy-MM-dd").create();
 
     public boolean isServicioParqueadero() {
         return servicioParqueadero;
+    }
+
+    public Integer getTamanioHabitaciones() {
+        tamanioHabitaciones = selectedHabitaciones.size();
+        return tamanioHabitaciones;
+    }
+
+    public void setTamanioHabitaciones(Integer tamanioHabitaciones) {
+        this.tamanioHabitaciones = tamanioHabitaciones;
     }
 
     public void setServicioParqueadero(boolean servicioParqueadero) {
@@ -162,16 +164,13 @@ public class TipoHabitacionView implements Serializable {
     public void init() {
         //llenar cosas al iniciar
 
-        tipoHabitacionJpaController = new TipoHabitacionFacadeRest();
-        habitacionJpaController = new HabitacionFacadeRest();
-        reHabitacionJpaController = new ReHabitacionFacadeRest();
-        String tipoDeHabitaciones = tipoHabitacionJpaController.findAll_JSON(String.class);
-        listTipoHbitacion = gson.fromJson(tipoDeHabitaciones, new TypeToken<List<TipoHabitacion>>() {
-        }.getType());
+        tipoHabitacionJpaController = new TipoHabitacionJpaController(utx, emf);
+        habitacionJpaController = new HabitacionJpaController(utx, emf);
+        reHabitacionJpaController = new ReHabitacionJpaController(utx, emf);
+        listTipoHbitacion = tipoHabitacionJpaController.findTipoHabitacionEntities();
         fechaActual = Calendar.getInstance().getTime();
-        reservaJpaController = new ReservaFacadeRest();
-        servicioJpaController = new ServicioFacadeRest();
-
+        servicioJpaController = new ServicioJpaController(utx, emf);
+        selectedHabitaciones = new ArrayList<>();
 //        lstIdHabitacionesDisponibles = reHabitacionJpaController.findIdHabitacionByFecha(fechaActual);
 //        Integer[] ids = new Integer[lstIdHabitacionesDisponibles.size()];
 //        for (Integer idHabitacionesDisponible : lstIdHabitacionesDisponibles) {
@@ -179,9 +178,7 @@ public class TipoHabitacionView implements Serializable {
 //        }
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         cabeceraTabla = "Habitaciones disponibles para el " + dateFormat.format(fechaActual);
-        String listaHabitacion = habitacionJpaController.findHabitacionesDisponiblesUnDia_JSON(String.class, dateFormat.format(fechaActual));
-        lstHabitacion = gson.fromJson(listaHabitacion, new TypeToken<List<Habitacion>>() {
-        }.getType());
+        lstHabitacion = habitacionJpaController.findHabitacionesDisponiblesUnDia(fechaActual);
 
         //     System.out.println("seleccionado:"+ selectedTipoHabitacion.getIdTipoHabitacion());
     }
@@ -194,9 +191,7 @@ public class TipoHabitacionView implements Serializable {
         // System.out.println("entro, tipo habitacionseleccionada:"+selectedTipoHabitacion+" Inicio: "+selectedFechaInicio+" FIn: "+selectedFechaFin+"evento :"+event.getObject().toString());
         if (selectedTipoHabitacion != null && selectedFechaInicio == null && selectedFechaFin == null) {
             System.out.println("selec" + selectedTipoHabitacion);
-            String listaHabitaciones = habitacionJpaController.findHabitacionbyTypeHabitacionId_JSON(String.class, "" + Integer.parseInt(selectedTipoHabitacion));
-            lstHabitacion = gson.fromJson(listaHabitaciones, new TypeToken<List<Habitacion>>() {
-            }.getType());
+            lstHabitacion = habitacionJpaController.findHabitacionbyTypeHabitacionId(Integer.parseInt(selectedTipoHabitacion));
             fechasSeleccionadas = dateFormat.format(fechaActual);
             if (!lstHabitacion.isEmpty()) {
                 cabeceraTabla = "Habitaciones " + lstHabitacion.get(0).getIdTipoHabitacion().getDescripcion() + " disponibles para el " + dateFormat.format(fechaActual);
@@ -206,9 +201,7 @@ public class TipoHabitacionView implements Serializable {
             System.out.println("Tamaño lista " + lstHabitacion.size());
         } else if (selectedTipoHabitacion != null && selectedFechaInicio != null && selectedFechaFin == null) {
             System.out.println("entro");
-            String listaHabitaciones = habitacionJpaController.findHabitacionesDisponiblesUnDiaAndTipoHabitacion_JSON(String.class, dateFormat.format(selectedFechaInicio), "" + Integer.parseInt(selectedTipoHabitacion));
-            lstHabitacion = gson.fromJson(listaHabitaciones, new TypeToken<List<Habitacion>>() {
-            }.getType());
+            lstHabitacion = habitacionJpaController.findHabitacionesDisponiblesUnDiaAndTipoHabitacion((selectedFechaInicio), Integer.parseInt(selectedTipoHabitacion));
             fechasSeleccionadas = dateFormat.format(selectedFechaInicio);
             if (!lstHabitacion.isEmpty()) {
                 cabeceraTabla = "Habitaciones " + lstHabitacion.get(0).getIdTipoHabitacion().getDescripcion() + " disponibles para el " + dateFormat.format(selectedFechaInicio);
@@ -217,9 +210,7 @@ public class TipoHabitacionView implements Serializable {
             }
             System.out.println("Tamaño lista " + lstHabitacion.size());
         } else if (selectedTipoHabitacion != null && selectedFechaInicio != null && selectedFechaFin != null) {
-            String listaHabitaciones = habitacionJpaController.findHabitacionesDisponiblesRangoDiasAndTipoHabitacion_JSON(String.class, dateFormat.format(selectedFechaInicio), dateFormat.format(selectedFechaFin), "" + Integer.parseInt(selectedTipoHabitacion));
-            lstHabitacion = gson.fromJson(listaHabitaciones, new TypeToken<List<Habitacion>>() {
-            }.getType());
+            lstHabitacion = habitacionJpaController.findHabitacionesDisponiblesRangoDiasAndTipoHabitacion((selectedFechaInicio), (selectedFechaFin), Integer.parseInt(selectedTipoHabitacion));
             fechasSeleccionadas = dateFormat.format(selectedFechaInicio) + " al " + dateFormat.format(selectedFechaFin);
             if (!lstHabitacion.isEmpty()) {
                 cabeceraTabla = "Habitaciones " + lstHabitacion.get(0).getIdTipoHabitacion().getDescripcion() + " disponibles del " + dateFormat.format(selectedFechaInicio) + " al " + dateFormat.format(selectedFechaFin);
@@ -229,9 +220,7 @@ public class TipoHabitacionView implements Serializable {
             System.out.println("Tamaño lista " + lstHabitacion.size());
         } else if (selectedTipoHabitacion == null && selectedFechaInicio != null && selectedFechaFin != null) {
             System.out.println("fecha inicio y fin");
-            String listaHabitaciones = habitacionJpaController.findHabitacionesDisponiblesRangoDias_JSON(String.class, dateFormat.format(selectedFechaInicio), dateFormat.format(selectedFechaFin));
-            lstHabitacion = gson.fromJson(listaHabitaciones, new TypeToken<List<Habitacion>>() {
-            }.getType());
+            lstHabitacion = habitacionJpaController.findHabitacionesDisponiblesRangoDias((selectedFechaInicio), (selectedFechaFin));
             fechasSeleccionadas = dateFormat.format(selectedFechaInicio) + " al " + dateFormat.format(selectedFechaFin);
             if (!lstHabitacion.isEmpty()) {
                 cabeceraTabla = "Habitaciones disponibles del " + dateFormat.format(selectedFechaInicio) + " al " + dateFormat.format(selectedFechaFin);
@@ -242,9 +231,7 @@ public class TipoHabitacionView implements Serializable {
 
         } else if (selectedTipoHabitacion == null && selectedFechaInicio != null && selectedFechaFin == null) {
             System.out.println("solo inicio para :" + selectedFechaInicio);
-            String listaHabitaciones = habitacionJpaController.findHabitacionesDisponiblesUnDia_JSON(String.class, dateFormat.format(selectedFechaInicio));
-            lstHabitacion = gson.fromJson(listaHabitaciones, new TypeToken<List<Habitacion>>() {
-            }.getType());
+            lstHabitacion = habitacionJpaController.findHabitacionesDisponiblesUnDia((selectedFechaInicio));
             fechasSeleccionadas = dateFormat.format(selectedFechaInicio);
             if (!lstHabitacion.isEmpty()) {
                 cabeceraTabla = "Habitaciones disponibles para el " + dateFormat.format(selectedFechaInicio);
@@ -254,9 +241,7 @@ public class TipoHabitacionView implements Serializable {
             }
             System.out.println("Tamaño lista " + lstHabitacion.size());
         } else {
-            String listaHabitaciones = habitacionJpaController.findHabitacionesDisponiblesUnDia_JSON(String.class, dateFormat.format(fechaActual));
-            lstHabitacion = gson.fromJson(listaHabitaciones, new TypeToken<List<Habitacion>>() {
-            }.getType());
+            lstHabitacion  = habitacionJpaController.findHabitacionesDisponiblesUnDia((fechaActual));
             fechasSeleccionadas = dateFormat.format(fechaActual);
         }
     }
@@ -317,21 +302,13 @@ public class TipoHabitacionView implements Serializable {
             c2.setTime(selectedFechaFin);
         }
         if (servicioDesayuno && servicioParqueadero) {
-            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
-            }.getType());
+            servicioSelected  = servicioJpaController.findServicio(1);
         } else if (!servicioDesayuno && servicioParqueadero) {
-            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
-            }.getType());
+            servicioSelected= servicioJpaController.findServicio(3);
         } else if (servicioDesayuno && !servicioParqueadero) {
-            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
-            }.getType());
+            servicioSelected = servicioJpaController.findServicio(2);
         } else {
-            String servicio = servicioJpaController.find_JSON(String.class, "" + 1);
-            servicioSelected = gson.fromJson(servicio, new TypeToken<Servicio>() {
-            }.getType());
+            servicioSelected = servicioJpaController.findServicio(4);
         }
         this.costoTotal = this.costoTotal.add(servicioSelected.getCostoTotal());
         Reserva reserva;
@@ -365,8 +342,8 @@ public class TipoHabitacionView implements Serializable {
         }
         reserva.setReHabitacionList(listReHabitacion);
         System.out.println(listReHabitacion.size());
-        ReservaJpaController jpaController=new ReservaJpaController(utx, emf);
-        ReHabitacionJpaController jpaController1=new ReHabitacionJpaController(utx, emf);
+        ReservaJpaController jpaController = new ReservaJpaController(utx, emf);
+        ReHabitacionJpaController jpaController1 = new ReHabitacionJpaController(utx, emf);
         jpaController.create(reserva);
         System.out.println("Reserva luego de guardar:" + reserva);
         for (ReHabitacion reHabitacion1 : listReHabitacion) {

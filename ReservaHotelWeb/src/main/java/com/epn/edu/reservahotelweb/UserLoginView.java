@@ -2,6 +2,7 @@ package com.epn.edu.reservahotelweb;
 
 import com.epn.edu.reservahotel.clientesServRest.UsuarioFacadeRest;
 import com.epn.edu.reservahotel.entidades.Usuario;
+import com.epn.edu.reservahotel.jpacontroller.UsuarioJpaController;
 import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -13,9 +14,6 @@ import javax.transaction.UserTransaction;
 
 import org.primefaces.context.RequestContext;
 
-import com.epn.edu.reservahotel.jpacontroller.UsuarioJpaController;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.util.List;
@@ -48,15 +46,12 @@ public class UserLoginView implements Serializable {
         this.nombreUsuario = nombreUsuario;
     }
 
-    UsuarioFacadeRest userController;
+    UsuarioJpaController userController;
 
     @PersistenceUnit(unitName = "com.epn.edu_ReservaHotelWeb_war_1.0-SNAPSHOTPU")
     private EntityManagerFactory emf;
     @Resource
     private UserTransaction utx;
-
-    private GsonBuilder builder = new GsonBuilder();
-    private Gson gson = builder.setDateFormat("yyyy-MM-dd").create();
 
     public UserLoginView() {
 
@@ -80,7 +75,7 @@ public class UserLoginView implements Serializable {
 
     @PostConstruct
     public void init() {
-        userController = new UsuarioFacadeRest();
+        userController = new UsuarioJpaController(utx, emf);
     }
 
     public void login(ActionEvent event) {
@@ -88,9 +83,7 @@ public class UserLoginView implements Serializable {
         FacesMessage message = null;
         boolean loggedIn = false;
         System.out.println(this.email + " , " + this.password);
-        String usuario = userController.findUserbyEmailAndPassword_JSON(String.class, email, password);
-        List<Usuario> listUsuario = gson.fromJson(usuario, new TypeToken<List<Usuario>>() {
-        }.getType());
+        List<Usuario> listUsuario = userController.findUserbyEmailAndPassword(email, password);
         boolean logeado = false;
         if (listUsuario != null) {
             loggedIn = true;

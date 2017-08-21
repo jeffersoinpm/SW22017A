@@ -40,7 +40,7 @@
 
     <ui:define name="source">
         <h:form id="tabla">
-            <p:dataTable id="listaHabitaciones" var="habitacion" value="#{tipoHabitacionView.lstHabitacion}" selection="#{tipoHabitacionView.selectedHabitaciones}" rowKey="#{habitacion.idHabitacion}" style="margin-bottom:0">
+            <p:dataTable id="listaHabitaciones" var="habitacion" value="#{tipoHabitacionView.lstHabitacion}" selection="#{tipoHabitacionView.selectedHabitaciones}"  rowKey="#{habitacion.idHabitacion}" style="margin-bottom:0">
                 <f:facet name="header">
                     #{tipoHabitacionView.cabeceraTabla}
                 </f:facet>
@@ -67,9 +67,9 @@
                         <f:setPropertyActionListener value="#{habitacion}" target="#{tipoHabitacionView.selectedHabitacion}" />
                     </p:commandButton>
                 </p:column>
-                <p:column headerText="Seleccionar" selectionMode="multiple" style="width:75px;text-align:center"/>
+                <p:column headerText="Seleccionar"  selectionMode="multiple" style="width:75px;text-align:center"/>
                 <f:facet name="footer">
-                    <p:commandButton process="listaHabitaciones"  update=":tabla:habitacionDetail" icon="ui-icon-search" value="Reserva" oncomplete="PF('habitacionDialog').show()" />
+                    <p:commandButton process="listaHabitaciones" update=":tabla:habitacionDetail" icon="ui-icon-search" value="Reserva" oncomplete="PF('habitacionDialog').show()" />
                 </f:facet>
             </p:dataTable>
 
@@ -106,7 +106,7 @@
                     <p:outputLabel style="visibility: hidden" value="#{userloginView.idUsuario}"/>
                     <br/>
                     <br/>
-                    <p:commandButton value="Reservar" style="right" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}" oncomplete="handleReserveRequest(xhr, status, args)"/>
+                    <p:commandButton value="Reservar" style="right" disabled="#{tipoHabitacionView.tamanioHabitaciones eq 0}" actionListener="#{tipoHabitacionView.registroRerservaHabitacion}" oncomplete="handleReserveRequest(xhr, status, args)"/>
 
                 </p:outputPanel>
             </p:dialog>
