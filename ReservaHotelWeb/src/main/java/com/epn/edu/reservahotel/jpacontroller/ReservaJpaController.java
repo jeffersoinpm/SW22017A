@@ -18,6 +18,7 @@ import com.epn.edu.reservahotel.jpacontroller.exceptions.IllegalOrphanException;
 import com.epn.edu.reservahotel.jpacontroller.exceptions.NonexistentEntityException;
 import com.epn.edu.reservahotel.jpacontroller.exceptions.RollbackFailureException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -276,6 +277,21 @@ public class ReservaJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<Reserva> findAllReservaByFechaInicio(Date fechaInicio, Integer idUsuario) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Reserva.findAllReservaByFechaInicio", Reserva.class);
+            query.setParameter("fechaInicio", fechaInicio);
+            query.setParameter("idUsuario", idUsuario);
+            List<Reserva> results = query.getResultList();
+
+            return (List<Reserva>) results;
+
         } finally {
             em.close();
         }

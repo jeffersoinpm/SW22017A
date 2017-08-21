@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r"),
     @NamedQuery(name = "Reserva.findByIdReserva", query = "SELECT r FROM Reserva r WHERE r.idReserva = :idReserva"),
     @NamedQuery(name = "Reserva.findByFechaInicio", query = "SELECT r FROM Reserva r WHERE r.fechaInicio = :fechaInicio"),
+    @NamedQuery(name = "Reserva.findAllReservaByFechaInicio", query = "SELECT r FROM Reserva r WHERE r.fechaInicio > :fechaInicio and r.idUsuario = :idUsuario"),
     @NamedQuery(name = "Reserva.findByFechaFin", query = "SELECT r FROM Reserva r WHERE r.fechaFin = :fechaFin"),
     @NamedQuery(name = "Reserva.findByCostoTotal", query = "SELECT r FROM Reserva r WHERE r.costoTotal = :costoTotal"),
     @NamedQuery(name = "Reserva.findByNumeroPersonas", query = "SELECT r FROM Reserva r WHERE r.numeroPersonas = :numeroPersonas")})

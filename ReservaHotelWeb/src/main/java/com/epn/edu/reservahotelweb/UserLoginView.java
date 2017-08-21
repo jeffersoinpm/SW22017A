@@ -14,7 +14,7 @@ import javax.transaction.UserTransaction;
 
 import org.primefaces.context.RequestContext;
 
-import com.google.gson.reflect.TypeToken;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
